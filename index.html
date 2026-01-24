@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Doctor & Patient Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">MediCare</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#" class="nav-link login-btn" onclick="showLoginModal(event)">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to MediCare</h1>
+            <p>Connecting Doctors and Patients for Better Healthcare</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="showLoginModal(event)">Patient Login</button>
+                <button class="btn btn-secondary" onclick="showLoginModal(event)">Doctor Login</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About MediCare</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="icon">👨‍⚕️</div>
+                    <h3>Expert Doctors</h3>
+                    <p>Connect with experienced healthcare professionals</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">🏥</div>
+                    <h3>Quality Care</h3>
+                    <p>Receive premium medical services and advice</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">📱</div>
+                    <h3>Easy Access</h3>
+                    <p>Book appointments anytime, anywhere</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Online Consultations</h3>
+                    <p>Schedule video consultations with specialists</p>
+                </div>
+                <div class="service-card">
+                    <h3>Appointment Booking</h3>
+                    <p>Easy appointment scheduling and management</p>
+                </div>
+                <div class="service-card">
+                    <h3>Medical Records</h3>
+                    <p>Access and manage your health records securely</p>
+                </div>
+                <div class="service-card">
+                    <h3>Prescription Management</h3>
+                    <p>View and manage digital prescriptions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 MediCare. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <div class="login-container">
+                <div class="login-tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'patient')">Patient</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'doctor')">Doctor</button>
+                </div>
+
+                <!-- Patient Login -->
+                <div id="patient" class="tab-content active">
+                    <h2>Patient Login</h2>
+                    <form onsubmit="handlePatientLogin(event)">
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <p>Don't have an account? <a href="#" onclick="switchToRegister(event)">Register here</a></p>
+                </div>
+
+                <!-- Doctor Login -->
+                <div id="doctor" class="tab-content">
+                    <h2>Doctor Login</h2>
+                    <form onsubmit="handleDoctorLogin(event)">
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <p>Don't have an account? <a href="#" onclick="switchToRegister(event)">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <div class="register-container">
+                <div class="register-tabs">
+                    <button class="tab-btn active" onclick="switchRegTab(event, 'patient-reg')">Patient</button>
+                    <button class="tab-btn" onclick="switchRegTab(event, 'doctor-reg')">Doctor</button>
+                </div>
+
+                <!-- Patient Registration -->
+                <div id="patient-reg" class="tab-content active">
+                    <h2>Patient Registration</h2>
+                    <form onsubmit="handlePatientRegister(event)">
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="tel" placeholder="Phone Number" required>
+                        <input type="number" placeholder="Age" required>
+                        <select required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select required>
+                            <option value="">Select Blood Type</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <input type="text" placeholder="Height (e.g., 180 cm)" required>
+                        <input type="text" placeholder="Weight (e.g., 75 kg)" required>
+                        <input type="text" placeholder="Address" required>
+                        <input type="text" placeholder="Emergency Contact (Name & Phone)" required>
+                        <textarea placeholder="Medical History" rows="3" required></textarea>
+                        <input type="text" placeholder="Allergies (if any)">
+                        <input type="password" placeholder="Password" required>
+                        <input type="password" placeholder="Confirm Password" required>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                    <p>Already have an account? <a href="#" onclick="switchToLogin(event)">Login here</a></p>
+                </div>
+
+                <!-- Doctor Registration -->
+                <div id="doctor-reg" class="tab-content">
+                    <h2>Doctor Registration</h2>
+                    <form onsubmit="handleDoctorRegister(event)">
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="tel" placeholder="Phone Number" required>
+                        <input type="text" placeholder="Medical License Number" required>
+                        <input type="text" placeholder="Specialization" required>
+                        <input type="password" placeholder="Password" required>
+                        <input type="password" placeholder="Confirm Password" required>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                    <p>Already have an account? <a href="#" onclick="switchToLogin(event)">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Dashboard -->
+    <div id="patientDashboard" class="dashboard hidden">
+        <nav class="dashboard-nav">
+            <h3>Patient Portal</h3>
+            <ul>
+                <li><a href="#" onclick="showPatientSection(event, 'overview')">Dashboard</a></li>
+                <li><a href="#" onclick="showPatientSection(event, 'appointments')">Appointments</a></li>
+                <li><a href="#" onclick="showPatientSection(event, 'doctors')">Find Doctors</a></li>
+                <li><a href="#" onclick="showPatientSection(event, 'records')">Medical Records</a></li>
+                <li><a href="#" onclick="showPatientSection(event, 'profile')">My Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="dashboard-content">
+            <!-- Overview Section -->
+            <div id="overview" class="dashboard-section active">
+                <h2>Welcome to Your Dashboard</h2>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Upcoming Appointments</h3>
+                        <p id="appointmentCount">0</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Total Consultations</h3>
+                        <p>5</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Medical Records</h3>
+                        <p>12</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments Section -->
+            <div id="appointments" class="dashboard-section">
+                <h2>Your Appointments</h2>
+                <button class="btn btn-primary" onclick="showBookAppointmentForm()">Book New Appointment</button>
+                <div id="appointmentsList" class="appointments-list">
+                    <p>No appointments scheduled</p>
+                </div>
+            </div>
+
+            <!-- Find Doctors Section -->
+            <div id="doctors" class="dashboard-section">
+                <h2>Find Doctors</h2>
+                <div class="search-bar">
+                    <input type="text" id="doctorSearch" placeholder="Search by name or specialization" onkeyup="searchDoctors()">
+                </div>
+                <div id="doctorsList" class="doctors-list"></div>
+            </div>
+
+            <!-- Medical Records Section -->
+            <div id="records" class="dashboard-section">
+                <h2>Medical Records & Medicines</h2>
+                <div class="medical-tabs">
+                    <button class="tab-btn active" onclick="switchMedicalTab(event, 'medicines')">My Medicines</button>
+                    <button class="tab-btn" onclick="switchMedicalTab(event, 'prescriptions')">Prescriptions</button>
+                </div>
+
+                <!-- Medicines Tab -->
+                <div id="medicines" class="tab-content active">
+                    <h3>Current Medicines</h3>
+                    <div id="medicinesList" class="medicines-list"></div>
+                </div>
+
+                <!-- Prescriptions Tab -->
+                <div id="prescriptions" class="tab-content">
+                    <h3>My Prescriptions</h3>
+                    <div id="prescriptionsList" class="records-list"></div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile" class="dashboard-section">
+                <h2>My Complete Profile</h2>
+                <div class="profile-container">
+                    <div class="profile-info-box">
+                        <h3>Personal Information</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Full Name:</label>
+                                <p id="profileName"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Email:</label>
+                                <p id="profileEmail"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Phone:</label>
+                                <p id="profilePhone"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Age:</label>
+                                <p id="profileAge"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Gender:</label>
+                                <p id="profileGender"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Blood Type:</label>
+                                <p id="profileBloodType"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Height:</label>
+                                <p id="profileHeight"></p>
+                            </div>
+                            <div class="info-item">
+                                <label>Weight:</label>
+                                <p id="profileWeight"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-box">
+                        <h3>Medical Information</h3>
+                        <div class="info-item">
+                            <label>Address:</label>
+                            <p id="profileAddress"></p>
+                        </div>
+                        <div class="info-item">
+                            <label>Emergency Contact:</label>
+                            <p id="profileEmergency"></p>
+                        </div>
+                        <div class="info-item">
+                            <label>Medical History:</label>
+                            <p id="profileMedicalHistory"></p>
+                        </div>
+                        <div class="info-item">
+                            <label>Allergies:</label>
+                            <p id="profileAllergies"></p>
+                        </div>
+                        <div class="info-item">
+                            <label>Assigned Doctor:</label>
+                            <p id="profileAssignedDoctor"></p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="editPatientProfile()">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Dashboard -->
+    <div id="doctorDashboard" class="dashboard hidden">
+        <nav class="dashboard-nav">
+            <h3>Doctor Portal</h3>
+            <ul>
+                <li><a href="#" onclick="showDoctorSection(event, 'overview')">Dashboard</a></li>
+                <li><a href="#" onclick="showDoctorSection(event, 'schedule')">My Schedule</a></li>
+                <li><a href="#" onclick="showDoctorSection(event, 'patients')">My Patients</a></li>
+                <li><a href="#" onclick="showDoctorSection(event, 'consultations')">Consultations</a></li>
+                <li><a href="#" onclick="showDoctorSection(event, 'profile')">My Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+
+        <div class="dashboard-content">
+            <!-- Overview Section -->
+            <div id="overview" class="dashboard-section active">
+                <h2>Welcome to Doctor Portal</h2>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Total Patients</h3>
+                        <p id="patientCount">0</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Appointments Today</h3>
+                        <p id="todayAppointments">0</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>Pending Consultations</h3>
+                        <p>3</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div id="schedule" class="dashboard-section">
+                <h2>My Schedule</h2>
+                <button class="btn btn-primary" onclick="addScheduleSlot()">Add Time Slot</button>
+                <div id="scheduleList" class="schedule-list"></div>
+            </div>
+
+            <!-- Patients Section -->
+            <div id="patients" class="dashboard-section">
+                <h2>My Patients</h2>
+                <div id="patientsList" class="patients-list"></div>
+            </div>
+
+            <!-- Consultations Section -->
+            <div id="consultations" class="dashboard-section">
+                <h2>Consultations & Prescriptions</h2>
+                <div class="doctor-tabs">
+                    <button class="tab-btn active" onclick="switchDoctorTab(event, 'consultations-list')">Consultations</button>
+                    <button class="tab-btn" onclick="switchDoctorTab(event, 'prescriptions-manage')">Manage Prescriptions</button>
+                </div>
+
+                <!-- Consultations List -->
+                <div id="consultations-list" class="tab-content active">
+                    <div id="consultationsList" class="consultations-list"></div>
+                </div>
+
+                <!-- Prescriptions Management -->
+                <div id="prescriptions-manage" class="tab-content">
+                    <h3>Add New Prescription</h3>
+                    <form onsubmit="handleAddPrescription(event)" class="prescription-form">
+                        <div class="form-group">
+                            <label>Select Patient:</label>
+                            <select id="prescriptionPatient" required>
+                                <option value="">Choose a patient</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Medicine Name:</label>
+                            <input type="text" placeholder="e.g., Aspirin" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dosage:</label>
+                            <input type="text" placeholder="e.g., 500mg" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Frequency:</label>
+                            <input type="text" placeholder="e.g., Once daily" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration:</label>
+                            <input type="text" placeholder="e.g., 30 days" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Instructions:</label>
+                            <textarea placeholder="e.g., Take with food" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Prescription</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profile" class="dashboard-section">
+                <h2>My Profile</h2>
+                <div class="profile-form">
+                    <input type="text" placeholder="Full Name" value="">
+                    <input type="email" placeholder="Email" value="">
+                    <input type="tel" placeholder="Phone" value="">
+                    <input type="text" placeholder="License Number" value="">
+                    <input type="text" placeholder="Specialization" value="">
+                    <textarea placeholder="Bio" rows="4"></textarea>
+                    <button class="btn btn-primary" onclick="updateDoctorProfile()">Update Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
