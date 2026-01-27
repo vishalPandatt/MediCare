@@ -1,0 +1,155 @@
+TROUBLESHOOTING GUIDE - Login Issues
+====================================
+
+If you see: "❌ Login failed. Make sure the backend server is running on port 3001"
+
+Follow these steps:
+
+---
+
+STEP 1: Check if Backend is Running
+------------------------------------
+Look at your first terminal where you ran "npm start"
+
+✅ If you see:
+   ✅ MediCare Backend Server running on http://localhost:3001
+   ✅ Connected to SQLite database
+   → Backend is running correctly, go to Step 2
+
+❌ If you see errors or nothing:
+   → Backend is NOT running
+   → Run: npm start
+   → Wait 2-3 seconds for it to start
+
+---
+
+STEP 2: Verify You're Registered
+--------------------------------
+Before logging in, you must REGISTER first!
+
+1. Click "Login" button
+2. Click "Patient Registration" tab
+3. Enter: Name, Email, Password
+4. Click "Register"
+5. Should see: "✅ Registration successful!"
+6. Now click "Login" tab
+7. Use same email and password to login
+
+---
+
+STEP 3: Check Your Input
+------------------------
+Login errors can happen if:
+❌ Email or password is wrong
+❌ Account was never registered
+❌ Spaces in email/password
+
+Verify:
+- Email is spelled correctly
+- No spaces before/after email
+- Password matches what you registered with
+- Passwords are case-sensitive
+
+---
+
+STEP 4: Check Network Connection
+---------------------------------
+Open browser Developer Tools (F12):
+1. Click "Console" tab
+2. Try to login
+3. Look for error messages
+4. Screenshot and note any errors
+
+Common errors:
+- "Failed to fetch" = Backend not running
+- "CORS error" = Backend port issue
+- "Connection refused" = Port 3001 not available
+
+---
+
+STEP 5: Reset Everything
+------------------------
+If nothing works:
+
+1. Close both terminals (Ctrl+C)
+2. Delete database file:
+   rm "c:\Users\Dell\Desktop\My html\MediCare\medicare.db"
+3. Start fresh:
+   - Terminal 1: npm start
+   - Terminal 2: npx http-server -p 8000
+4. Register a new account
+5. Try to login
+
+---
+
+STEP 6: Check Port Conflicts
+----------------------------
+Maybe port 3001 is already in use:
+
+PowerShell: netstat -ano | findstr 3001
+
+If something is using port 3001:
+- Close that application
+- Or kill the process (if you know what it is)
+
+---
+
+COMMON SOLUTIONS
+----------------
+
+❌ "Backend server is running on port 3001"
+✅ Close other apps using port 3001
+✅ Delete medicare.db and restart
+✅ Restart both servers
+
+❌ "Invalid email or password"
+✅ Register first! (Don't login without registering)
+✅ Check email spelling
+✅ Check caps lock
+
+❌ "CORS error in console"
+✅ Backend server stopped running
+✅ Run "npm start" again in Terminal 1
+
+❌ No database file created
+✅ Run "npm start" - creates on first run
+✅ Check: "c:\Users\Dell\Desktop\My html\MediCare\medicare.db"
+
+---
+
+STILL NOT WORKING?
+------------------
+1. Check browser console (F12 → Console tab)
+2. Copy any red error messages
+3. Note which step fails
+4. Check if both servers are running:
+   - Terminal 1: "npm start" should show ✅ Backend running
+   - Terminal 2: "npx http-server" should show Available on...
+
+---
+
+ULTIMATE FIX: COMPLETE RESET
+----------------------------
+If all else fails:
+
+1. Kill all terminals (Ctrl+C)
+2. Open PowerShell in project folder
+3. Run these commands:
+
+   npm install
+   del medicare.db
+   npm start
+
+4. In new terminal:
+   npx http-server -p 8000
+
+5. Go to http://127.0.0.1:8000
+6. REGISTER first (don't try to login)
+7. Then LOGIN
+
+---
+
+Need more help?
+- Check backend logs (Terminal 1)
+- Check browser console (F12)
+- Look for error messages and follow suggestions

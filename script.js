@@ -109,7 +109,12 @@ function handlePatientLogin(e) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(data => Promise.reject(data));
+        }
+        return res.json();
+    })
     .then(data => {
         if (data.error) {
             alert('❌ ' + data.error);
@@ -124,8 +129,9 @@ function handlePatientLogin(e) {
         e.target.reset();
     })
     .catch(err => {
-        alert('❌ Login failed. Make sure the backend server is running on port 3001.');
-        console.error(err);
+        const errorMsg = err.error || err.message || 'Login failed';
+        console.error('Login error:', err);
+        alert('❌ ' + errorMsg + '\n\nMake sure:\n1. Backend server is running (npm start)\n2. User account exists\n3. Email and password are correct');
     });
 }
 
@@ -140,7 +146,12 @@ function handleDoctorLogin(e) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(data => Promise.reject(data));
+        }
+        return res.json();
+    })
     .then(data => {
         if (data.error) {
             alert('❌ ' + data.error);
@@ -155,8 +166,9 @@ function handleDoctorLogin(e) {
         e.target.reset();
     })
     .catch(err => {
-        alert('❌ Login failed. Make sure the backend server is running on port 3001.');
-        console.error(err);
+        const errorMsg = err.error || err.message || 'Login failed';
+        console.error('Login error:', err);
+        alert('❌ ' + errorMsg + '\n\nMake sure:\n1. Backend server is running (npm start)\n2. User account exists\n3. Email and password are correct');
     });
 }
 
@@ -171,8 +183,13 @@ function handlePatientRegister(e) {
     const password = inputs[2].value;
     const confirmPassword = inputs[3].value;
 
+    if (!name || !email || !password) {
+        alert('❌ Please fill in all fields');
+        return;
+    }
+
     if (password !== confirmPassword) {
-        alert('Passwords do not match');
+        alert('❌ Passwords do not match');
         return;
     }
 
@@ -182,7 +199,12 @@ function handlePatientRegister(e) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(data => Promise.reject(data));
+        }
+        return res.json();
+    })
     .then(data => {
         if (data.error) {
             alert('❌ ' + data.error);
@@ -194,8 +216,9 @@ function handlePatientRegister(e) {
         form.reset();
     })
     .catch(err => {
-        alert('❌ Registration failed. Make sure the backend server is running on port 3001.');
-        console.error(err);
+        const errorMsg = err.error || err.message || 'Registration failed';
+        console.error('Registration error:', err);
+        alert('❌ ' + errorMsg + '\n\nMake sure backend server is running (npm start)');
     });
 }
 
@@ -209,8 +232,13 @@ function handleDoctorRegister(e) {
     const password = inputs[2].value;
     const confirmPassword = inputs[3].value;
 
+    if (!name || !email || !password) {
+        alert('❌ Please fill in all fields');
+        return;
+    }
+
     if (password !== confirmPassword) {
-        alert('Passwords do not match');
+        alert('❌ Passwords do not match');
         return;
     }
 
@@ -220,7 +248,12 @@ function handleDoctorRegister(e) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(data => Promise.reject(data));
+        }
+        return res.json();
+    })
     .then(data => {
         if (data.error) {
             alert('❌ ' + data.error);
@@ -232,8 +265,9 @@ function handleDoctorRegister(e) {
         form.reset();
     })
     .catch(err => {
-        alert('❌ Registration failed. Make sure the backend server is running on port 3001.');
-        console.error(err);
+        const errorMsg = err.error || err.message || 'Registration failed';
+        console.error('Registration error:', err);
+        alert('❌ ' + errorMsg + '\n\nMake sure backend server is running (npm start)');
     });
 }
 
