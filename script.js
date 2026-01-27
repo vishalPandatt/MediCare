@@ -63,11 +63,16 @@ let currentUserType = null;
 // Modal Functions
 function showLoginModal(e) {
     if (e) e.preventDefault();
-    document.getElementById('loginModal').classList.add('show');
+    // Show full-screen login page instead of modal
+    document.getElementById('fullScreenLoginPage').classList.add('show');
 }
 
 function closeLoginModal() {
     document.getElementById('loginModal').classList.remove('show');
+}
+
+function closeFullScreenLogin() {
+    document.getElementById('fullScreenLoginPage').classList.remove('show');
 }
 
 function showRegisterModal() {
@@ -83,6 +88,18 @@ function switchTab(e, tab) {
     e.preventDefault();
     const tabContents = document.querySelectorAll('.login-container .tab-content');
     const tabBtns = document.querySelectorAll('.login-tabs .tab-btn');
+
+    tabContents.forEach(content => content.classList.remove('active'));
+    tabBtns.forEach(btn => btn.classList.remove('active'));
+
+    document.getElementById(tab).classList.add('active');
+    e.target.classList.add('active');
+}
+
+function switchLoginTab(e, tab) {
+    e.preventDefault();
+    const tabContents = document.querySelectorAll('.login-page-content .tab-content');
+    const tabBtns = document.querySelectorAll('.login-page-content .login-tabs .tab-btn');
 
     tabContents.forEach(content => content.classList.remove('active'));
     tabBtns.forEach(btn => btn.classList.remove('active'));

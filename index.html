@@ -142,6 +142,39 @@
         </div>
     </div>
 
+    <!-- Full-Screen Login Page -->
+    <div id="fullScreenLoginPage" class="login-page">
+        <div class="login-page-content">
+            <button class="login-close-btn" onclick="closeFullScreenLogin()">&times;</button>
+            <div class="login-tabs">
+                <button class="tab-btn active" onclick="switchLoginTab(event, 'fs-patient')">Patient Login</button>
+                <button class="tab-btn" onclick="switchLoginTab(event, 'fs-doctor')">Doctor Login</button>
+            </div>
+
+            <!-- Patient Full-Screen Login -->
+            <div id="fs-patient" class="tab-content active">
+                <h2>Patient Login</h2>
+                <form onsubmit="handlePatientLogin(event)">
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" onclick="switchToRegister(event)">Register here</a></p>
+            </div>
+
+            <!-- Doctor Full-Screen Login -->
+            <div id="fs-doctor" class="tab-content">
+                <h2>Doctor Login</h2>
+                <form onsubmit="handleDoctorLogin(event)">
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" onclick="switchToRegister(event)">Register here</a></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Registration Modal -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
