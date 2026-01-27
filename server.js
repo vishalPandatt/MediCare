@@ -7,18 +7,29 @@ const app = express();
 const PORT = 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200
+}));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('.'));
 
 // Initialize SQLite Database
 const db = new sqlite3.Database('./medicare.db', (err) => {
     if (err) {
-        console.error('Database connection error:', err);
+        console.error('❌ Database connection error:', err);
     } else {
-        console.log('Connected to SQLite database');
+        console.log('✅ Connected to SQLite database');
         initializeDatabase();
     }
+});
+
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Backend server is running' });
 });
 
 // Initialize Database Tables
