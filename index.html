@@ -16,7 +16,19 @@
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="#" class="nav-link login-btn" onclick="showLoginModal(event)">Login</a></li>
+                <li id="loginNavItem" style="display: block;">
+                    <a href="#" class="nav-link login-btn" onclick="showLoginModal(event)">Login</a>
+                </li>
+                <li id="userNavItem" style="display: none;" class="user-nav-item">
+                    <div class="user-dropdown">
+                        <button class="user-icon-btn" onclick="toggleUserMenu(event)">👤</button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="#" onclick="viewUserProfile(event)">👁️ View Profile</a>
+                            <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #e5e7eb;">
+                            <a href="#" onclick="handleLogout(event)">🚪 Logout</a>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
@@ -27,8 +39,79 @@
             <h1>Welcome to MediCare</h1>
             <p>Connecting Doctors and Patients for Better Healthcare</p>
             <div class="hero-buttons">
-                <button class="btn btn-primary" onclick="showLoginModal(event)">Patient Login</button>
-                <button class="btn btn-secondary" onclick="showLoginModal(event)">Doctor Login</button>
+                <!-- Buttons for non-logged-in users -->
+                <div id="guestButtons" class="button-group">
+                    <button class="btn btn-primary" onclick="showLoginModal(event)">Patient Login</button>
+                    <button class="btn btn-secondary" onclick="showLoginModal(event)">Doctor Login</button>
+                </div>
+                
+                <!-- Buttons for logged-in patients -->
+                <div id="patientButtons" class="button-group" style="display: none;">
+                    <button class="btn btn-primary" onclick="showBookAppointment(event)">📅 Book Appointment</button>
+                </div>
+                
+                <!-- Buttons for logged-in doctors -->
+                <div id="doctorButtons" class="button-group" style="display: none;">
+                    <button class="btn btn-primary" onclick="showPatientsList(event)">👥 View Patients List</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Profile Page -->
+    <section id="userProfilePage" class="user-profile-page" style="display: none;">
+        <div class="container">
+            <div class="profile-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>My Profile</h1>
+            </div>
+            <div class="profile-card">
+                <div class="profile-info">
+                    <div class="profile-detail">
+                        <label>Name:</label>
+                        <p id="profileName"></p>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Email:</label>
+                        <p id="profileEmail"></p>
+                    </div>
+                    <div class="profile-detail">
+                        <label>Account Type:</label>
+                        <p id="profileType"></p>
+                    </div>
+                    <div id="patientDetails" style="display: none;">
+                        <div class="profile-detail">
+                            <label>Age:</label>
+                            <p id="profileAge"></p>
+                        </div>
+                        <div class="profile-detail">
+                            <label>Gender:</label>
+                            <p id="profileGender"></p>
+                        </div>
+                        <div class="profile-detail">
+                            <label>Blood Type:</label>
+                            <p id="profileBloodType"></p>
+                        </div>
+                        <div class="profile-detail">
+                            <label>Phone:</label>
+                            <p id="profilePhone"></p>
+                        </div>
+                    </div>
+                    <div id="doctorDetails" style="display: none;">
+                        <div class="profile-detail">
+                            <label>Specialization:</label>
+                            <p id="profileSpecialization"></p>
+                        </div>
+                        <div class="profile-detail">
+                            <label>License Number:</label>
+                            <p id="profileLicense"></p>
+                        </div>
+                        <div class="profile-detail">
+                            <label>Phone:</label>
+                            <p id="profileDoctorPhone"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

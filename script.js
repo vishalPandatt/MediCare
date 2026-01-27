@@ -154,8 +154,9 @@ function handlePatientLogin(e) {
     if (user) {
         currentUser = user;
         currentUserType = 'patient';
-        closeLoginModal();
-        showPatientDashboard();
+        closeFullScreenLogin();
+        updateNavBar();
+        showHome();
         alert('Welcome, ' + user.name);
     } else {
         alert('Invalid credentials');
@@ -171,8 +172,9 @@ function handleDoctorLogin(e) {
     if (user) {
         currentUser = user;
         currentUserType = 'doctor';
-        closeLoginModal();
-        showDoctorDashboard();
+        closeFullScreenLogin();
+        updateNavBar();
+        showHome();
         alert('Welcome, ' + user.name);
     } else {
         alert('Invalid credentials');
@@ -797,5 +799,216 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Navigation Bar Update
+function updateNavBar() {
+    const loginItem = document.getElementById('loginNavItem');
+    const userItem = document.getElementById('userNavItem');
+    const guestButtons = document.getElementById('guestButtons');
+    const patientButtons = document.getElementById('patientButtons');
+    const doctorButtons = document.getElementById('doctorButtons');
+    
+    if (currentUser) {
+        loginItem.style.display = 'none';
+        userItem.style.display = 'block';
+        
+        // Update hero buttons based on user type
+        if (currentUserType === 'patient') {
+            guestButtons.style.display = 'none';
+            patientButtons.style.display = 'flex';
+            doctorButtons.style.display = 'none';
+        } else if (currentUserType === 'doctor') {
+            guestButtons.style.display = 'none';
+            patientButtons.style.display = 'none';
+            doctorButtons.style.display = 'flex';
+        }
+    } else {
+        loginItem.style.display = 'block';
+        userItem.style.display = 'none';
+        guestButtons.style.display = 'flex';
+        patientButtons.style.display = 'none';
+        doctorButtons.style.display = 'none';
+    }
+}
+
+// Toggle User Dropdown Menu
+function toggleUserMenu(e) {
+    e.preventDefault();
+    const menu = document.getElementById('userDropdownMenu');
+    menu.classList.toggle('show');
+}
+
+// View User Profile
+function viewUserProfile(e) {
+    e.preventDefault();
+    
+    if (!currentUser) {
+        alert('Please login first');
+        return;
+    }
+    
+    // Hide main sections
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('about').style.display = 'none';
+    document.getElementById('services').style.display = 'none';
+    document.getElementById('contact').style.display = 'none';
+    document.getElementById('footer').style.display = 'none';
+    
+    // Show profile page
+    const profilePage = document.getElementById('userProfilePage');
+    profilePage.style.display = 'block';
+    
+    // Populate profile data - use textContent to set values
+    setTimeout(function() {
+        document.getElementById('profileName').textContent = currentUser.name;
+        document.getElementById('profileEmail').textContent = currentUser.email;
+        document.getElementById('profileType').textContent = currentUserType === 'patient' ? 'Patient' : 'Doctor';
+        
+        if (currentUserType === 'patient') {
+            document.getElementById('patientDetails').style.display = 'block';
+            document.getElementById('doctorDetails').style.display = 'none';
+            
+            document.getElementById('profileAge').textContent = currentUser.age || 'Not Provided';
+            document.getElementById('profileGender').textContent = currentUser.gender || 'Not Provided';
+            document.getElementById('profileBloodType').textContent = currentUser.bloodType || 'Not Provided';
+            document.getElementById('profilePhone').textContent = currentUser.phone || 'Not Provided';
+        } else {
+            document.getElementById('patientDetails').style.display = 'none';
+            document.getElementById('doctorDetails').style.display = 'block';
+            
+            document.getElementById('profileSpecialization').textContent = currentUser.specialization || 'Not Provided';
+            document.getElementById('profileLicense').textContent = currentUser.license || 'Not Provided';
+            document.getElementById('profileDoctorPhone').textContent = currentUser.phone || 'Not Provided';
+        }
+    }, 100);
+    
+    // Close dropdown menu
+    document.getElementById('userDropdownMenu').classList.remove('show');
+}
+
+// Back to Home
+function backToHome() {
+    // Show main sections
+    document.getElementById('home').style.display = 'block';
+    document.getElementById('about').style.display = 'block';
+    document.getElementById('services').style.display = 'block';
+    document.getElementById('contact').style.display = 'block';
+    document.getElementById('footer').style.display = 'block';
+    
+    // Hide profile page
+    document.getElementById('userProfilePage').style.display = 'none';
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+// Show Home
+function showHome() {
+    document.getElementById('home').style.display = 'block';
+    document.getElementById('about').style.display = 'block';
+    document.getElementById('services').style.display = 'block';
+    document.getElementById('contact').style.display = 'block';
+    document.getElementById('footer').style.display = 'block';
+    document.getElementById('userProfilePage').style.display = 'none';
+    window.scrollTo(0, 0);
+}
+
+// Book Appointment - Patient Feature
+function showBookAppointment(e) {
+    if (e) e.preventDefault();
+    
+    if (!currentUser || currentUserType !== 'patient') {
+        alert('Please login as a patient to book an appointment');
+        return;
+    }
+    
+    const doctorName = prompt('Enter doctor name (or select from list):\n' + 
+        users.doctors.map((d, i) => (i+1) + '. Dr. ' + d.name + ' (' + d.specialization + ')').join('\n'));
+    
+    if (!doctorName) return;
+    
+    let selectedDoctor = null;
+    
+    // Try to find by name or index
+    if (!isNaN(doctorName)) {
+        selectedDoctor = users.doctors[parseInt(doctorName) - 1];
+    } else {
+        selectedDoctor = users.doctors.find(d => d.name.toLowerCase().includes(doctorName.toLowerCase()));
+    }
+    
+    if (!selectedDoctor) {
+        alert('Doctor not found');
+        return;
+    }
+    
+    const appointmentDate = prompt('Enter appointment date (YYYY-MM-DD):');
+    if (!appointmentDate) return;
+    
+    const appointmentTime = prompt('Enter appointment time (HH:MM AM/PM):');
+    if (!appointmentTime) return;
+    
+    // Create appointment
+    const newAppointment = {
+        id: appointments.length + 1,
+        patientId: currentUser.id,
+        patientName: currentUser.name,
+        doctorId: selectedDoctor.id,
+        doctorName: selectedDoctor.name,
+        specialization: selectedDoctor.specialization,
+        date: appointmentDate,
+        time: appointmentTime,
+        status: 'Scheduled',
+        notes: '',
+        medicineIds: []
+    };
+    
+    appointments.push(newAppointment);
+    alert('✅ Appointment booked successfully!\n\nDoctor: Dr. ' + selectedDoctor.name + 
+          '\nDate: ' + appointmentDate + '\nTime: ' + appointmentTime);
+}
+
+// View Patients List - Doctor Feature
+function showPatientsList(e) {
+    if (e) e.preventDefault();
+    
+    if (!currentUser || currentUserType !== 'doctor') {
+        alert('Please login as a doctor to view patients');
+        return;
+    }
+    
+    // Get patients assigned to this doctor or all patients
+    const patientList = users.patients.map((p, index) => {
+        return (index + 1) + '. ' + p.name + ' (Email: ' + p.email + ', Age: ' + p.age + ', Gender: ' + p.gender + ')';
+    }).join('\n');
+    
+    if (patientList.length === 0) {
+        alert('No patients in the system');
+        return;
+    }
+    
+    alert('👥 PATIENTS LIST:\n\n' + patientList);
+}
+
+// Logout
+function handleLogout(e) {
+    e.preventDefault();
+    
+    if (confirm('Are you sure you want to logout?')) {
+        currentUser = null;
+        currentUserType = null;
+        updateNavBar();
+        showHome();
+        alert('You have been logged out successfully');
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const userNav = document.querySelector('.user-nav-item');
+    if (userNav && !userNav.contains(event.target)) {
+        document.getElementById('userDropdownMenu').classList.remove('show');
+    }
+});
+
 // Initialize
 console.log('MediCare Website Loaded');
+updateNavBar();
