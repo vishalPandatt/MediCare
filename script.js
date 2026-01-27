@@ -122,14 +122,26 @@ function switchRegTab(e, tab) {
 
 function switchToRegister(e) {
     e.preventDefault();
-    closeLoginModal();
-    showRegisterModal();
+    closeFullScreenLogin();
+    document.getElementById('registerModal').classList.add('show');
 }
 
 function switchToLogin(e) {
     e.preventDefault();
-    closeRegisterModal();
-    showLoginModal();
+    document.getElementById('registerModal').classList.remove('show');
+    document.getElementById('fullScreenLoginPage').classList.add('show');
+}
+
+function switchRegTab(e, tab) {
+    e.preventDefault();
+    const tabContents = document.querySelectorAll('#registerModal .tab-content');
+    const tabBtns = document.querySelectorAll('#registerModal .login-tabs .tab-btn');
+
+    tabContents.forEach(content => content.classList.remove('active'));
+    tabBtns.forEach(btn => btn.classList.remove('active'));
+
+    document.getElementById(tab).classList.add('active');
+    e.target.classList.add('active');
 }
 
 // Login Functions
@@ -171,22 +183,12 @@ function handleDoctorLogin(e) {
 function handlePatientRegister(e) {
     e.preventDefault();
     const form = e.target;
-    const inputs = form.querySelectorAll('input, textarea, select');
+    const inputs = form.querySelectorAll('input');
     
     const name = inputs[0].value;
     const email = inputs[1].value;
-    const phone = inputs[2].value;
-    const age = inputs[3].value;
-    const gender = inputs[4].value;
-    const bloodType = inputs[5].value;
-    const height = inputs[6].value;
-    const weight = inputs[7].value;
-    const address = inputs[8].value;
-    const emergencyContact = inputs[9].value;
-    const medicalHistory = form.querySelector('textarea').value;
-    const allergies = inputs[12].value;
-    const password = inputs[13].value;
-    const confirmPassword = inputs[14].value;
+    const password = inputs[2].value;
+    const confirmPassword = inputs[3].value;
 
     if (password !== confirmPassword) {
         alert('Passwords do not match');
@@ -203,35 +205,34 @@ function handlePatientRegister(e) {
         email: email,
         password: password,
         name: name,
-        phone: phone,
-        age: age,
-        gender: gender,
-        bloodType: bloodType,
-        address: address,
-        emergencyContact: emergencyContact,
-        medicalHistory: medicalHistory,
-        allergies: allergies,
+        phone: '555-' + Math.floor(Math.random() * 10000),
+        age: 30,
+        gender: 'Not Specified',
+        bloodType: 'O+',
+        address: 'Not Provided',
+        emergencyContact: 'Not Provided',
+        medicalHistory: 'None',
+        allergies: 'None',
         assignedDoctorId: null,
-        height: height,
-        weight: weight
+        height: 'Not Provided',
+        weight: 'Not Provided'
     };
 
     users.patients.push(newPatient);
-    alert('Registration successful! Please login.');
-    closeRegisterModal();
-    showLoginModal();
+    alert('Registration successful! Please login with your email and password.');
+    document.getElementById('registerModal').classList.remove('show');
+    document.getElementById('fullScreenLoginPage').classList.add('show');
 }
 
 function handleDoctorRegister(e) {
     e.preventDefault();
     const form = e.target;
-    const name = form.querySelector('input[type="text"]').value;
-    const email = form.querySelector('input[type="email"]').value;
-    const phone = form.querySelectorAll('input[type="tel"]')[0].value;
-    const license = form.querySelector('input[placeholder="Medical License Number"]').value;
-    const specialization = form.querySelector('input[placeholder="Specialization"]').value;
-    const password = form.querySelectorAll('input[type="password"]')[0].value;
-    const confirmPassword = form.querySelectorAll('input[type="password"]')[1].value;
+    const inputs = form.querySelectorAll('input');
+    
+    const name = inputs[0].value;
+    const email = inputs[1].value;
+    const password = inputs[2].value;
+    const confirmPassword = inputs[3].value;
 
     if (password !== confirmPassword) {
         alert('Passwords do not match');
@@ -248,15 +249,16 @@ function handleDoctorRegister(e) {
         email: email,
         password: password,
         name: name,
-        phone: phone,
-        license: license,
-        specialization: specialization
+        phone: '555-' + Math.floor(Math.random() * 10000),
+        license: 'LIC' + (users.doctors.length + 100),
+        specialization: 'General Practitioner',
+        bio: 'Professional healthcare provider'
     };
 
     users.doctors.push(newDoctor);
-    alert('Registration successful! Please login.');
-    closeRegisterModal();
-    showLoginModal();
+    alert('Registration successful! Please login with your email and password.');
+    document.getElementById('registerModal').classList.remove('show');
+    document.getElementById('fullScreenLoginPage').classList.add('show');
 }
 
 // Dashboard Functions
