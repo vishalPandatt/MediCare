@@ -1,61 +1,14 @@
-// Data Storage (simulated database)
+// Backend API Configuration
+const API_BASE_URL = 'http://localhost:3001/api';
+
+// Data Storage (for compatibility, but will use backend)
 let users = {
-    patients: [
-        {
-            id: 1,
-            email: 'patient1@example.com',
-            password: 'pass123',
-            name: 'John Doe',
-            phone: '555-0001',
-            age: 35,
-            gender: 'Male',
-            bloodType: 'O+',
-            address: '123 Main Street, City',
-            emergencyContact: 'Jane Doe (555-0002)',
-            medicalHistory: 'Diabetes, Hypertension',
-            allergies: 'Penicillin',
-            assignedDoctorId: 1,
-            height: '180 cm',
-            weight: '75 kg'
-        }
-    ],
-    doctors: [
-        { id: 1, email: 'doctor1@example.com', password: 'pass123', name: 'Dr. Smith', specialization: 'Cardiologist', license: 'LIC001', phone: '555-1001', bio: 'Expert in cardiac care' },
-        { id: 2, email: 'doctor2@example.com', password: 'pass123', name: 'Dr. Johnson', specialization: 'Dermatologist', license: 'LIC002', phone: '555-1002', bio: 'Specialized in skin diseases' },
-        { id: 3, email: 'doctor3@example.com', password: 'pass123', name: 'Dr. Williams', specialization: 'Neurologist', license: 'LIC003', phone: '555-1003', bio: 'Brain and nervous system specialist' },
-    ]
+    patients: [],
+    doctors: []
 };
 
-let appointments = [
-    {
-        id: 1,
-        patientId: 1,
-        patientName: 'John Doe',
-        doctorId: 1,
-        doctorName: 'Dr. Smith',
-        specialization: 'Cardiologist',
-        date: '2025-02-15',
-        time: '10:00 AM',
-        status: 'Scheduled',
-        notes: 'Regular checkup',
-        medicineIds: [1]
-    }
-];
-
-let medicines = [
-    {
-        id: 1,
-        name: 'Aspirin',
-        dosage: '500mg',
-        frequency: 'Once daily',
-        duration: '30 days',
-        prescribedBy: 1,
-        prescribedTo: 1,
-        appointmentId: 1,
-        prescriptionDate: '2025-02-15',
-        instructions: 'Take with food'
-    }
-];
+let appointments = [];
+let medicines = [];
 
 let currentUser = null;
 let currentUserType = null;
@@ -150,17 +103,30 @@ function handlePatientLogin(e) {
     const email = e.target.querySelector('input[type="email"]').value;
     const password = e.target.querySelector('input[type="password"]').value;
 
-    const user = users.patients.find(u => u.email === email && u.password === password);
-    if (user) {
-        currentUser = user;
-        currentUserType = 'patient';
+    // Login via API
+    fetch(`${API_BASE_URL}/patients/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert('❌ ' + data.error);
+            return;
+        }
+        currentUser = data.user;
+        currentUserType = data.userType;
         closeFullScreenLogin();
         updateNavBar();
         showHome();
-        alert('Welcome, ' + user.name);
-    } else {
-        alert('Invalid credentials');
-    }
+        alert('✅ Welcome, ' + data.user.name);
+        e.target.reset();
+    })
+    .catch(err => {
+        alert('❌ Login failed. Make sure the backend server is running on port 3001.');
+        console.error(err);
+    });
 }
 
 function handleDoctorLogin(e) {
@@ -168,17 +134,30 @@ function handleDoctorLogin(e) {
     const email = e.target.querySelector('input[type="email"]').value;
     const password = e.target.querySelector('input[type="password"]').value;
 
-    const user = users.doctors.find(u => u.email === email && u.password === password);
-    if (user) {
-        currentUser = user;
-        currentUserType = 'doctor';
+    // Login via API
+    fetch(`${API_BASE_URL}/doctors/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert('❌ ' + data.error);
+            return;
+        }
+        currentUser = data.user;
+        currentUserType = data.userType;
         closeFullScreenLogin();
         updateNavBar();
         showHome();
-        alert('Welcome, ' + user.name);
-    } else {
-        alert('Invalid credentials');
-    }
+        alert('✅ Welcome, ' + data.user.name);
+        e.target.reset();
+    })
+    .catch(err => {
+        alert('❌ Login failed. Make sure the backend server is running on port 3001.');
+        console.error(err);
+    });
 }
 
 // Registration Functions
@@ -197,33 +176,27 @@ function handlePatientRegister(e) {
         return;
     }
 
-    if (users.patients.find(u => u.email === email)) {
-        alert('Email already registered');
-        return;
-    }
-
-    const newPatient = {
-        id: users.patients.length + 1,
-        email: email,
-        password: password,
-        name: name,
-        phone: '555-' + Math.floor(Math.random() * 10000),
-        age: 30,
-        gender: 'Not Specified',
-        bloodType: 'O+',
-        address: 'Not Provided',
-        emergencyContact: 'Not Provided',
-        medicalHistory: 'None',
-        allergies: 'None',
-        assignedDoctorId: null,
-        height: 'Not Provided',
-        weight: 'Not Provided'
-    };
-
-    users.patients.push(newPatient);
-    alert('Registration successful! Please login with your email and password.');
-    document.getElementById('registerModal').classList.remove('show');
-    document.getElementById('fullScreenLoginPage').classList.add('show');
+    // Register via API
+    fetch(`${API_BASE_URL}/patients/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert('❌ ' + data.error);
+            return;
+        }
+        alert('✅ Registration successful! Please login with your email and password.');
+        document.getElementById('registerModal').classList.remove('show');
+        document.getElementById('fullScreenLoginPage').classList.add('show');
+        form.reset();
+    })
+    .catch(err => {
+        alert('❌ Registration failed. Make sure the backend server is running on port 3001.');
+        console.error(err);
+    });
 }
 
 function handleDoctorRegister(e) {
@@ -241,26 +214,27 @@ function handleDoctorRegister(e) {
         return;
     }
 
-    if (users.doctors.find(u => u.email === email)) {
-        alert('Email already registered');
-        return;
-    }
-
-    const newDoctor = {
-        id: users.doctors.length + 1,
-        email: email,
-        password: password,
-        name: name,
-        phone: '555-' + Math.floor(Math.random() * 10000),
-        license: 'LIC' + (users.doctors.length + 100),
-        specialization: 'General Practitioner',
-        bio: 'Professional healthcare provider'
-    };
-
-    users.doctors.push(newDoctor);
-    alert('Registration successful! Please login with your email and password.');
-    document.getElementById('registerModal').classList.remove('show');
-    document.getElementById('fullScreenLoginPage').classList.add('show');
+    // Register via API
+    fetch(`${API_BASE_URL}/doctors/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert('❌ ' + data.error);
+            return;
+        }
+        alert('✅ Registration successful! Please login with your email and password.');
+        document.getElementById('registerModal').classList.remove('show');
+        document.getElementById('fullScreenLoginPage').classList.add('show');
+        form.reset();
+    })
+    .catch(err => {
+        alert('❌ Registration failed. Make sure the backend server is running on port 3001.');
+        console.error(err);
+    });
 }
 
 // Dashboard Functions
@@ -921,49 +895,59 @@ function showBookAppointment(e) {
         return;
     }
     
-    const doctorName = prompt('Enter doctor name (or select from list):\n' + 
-        users.doctors.map((d, i) => (i+1) + '. Dr. ' + d.name + ' (' + d.specialization + ')').join('\n'));
-    
-    if (!doctorName) return;
-    
-    let selectedDoctor = null;
-    
-    // Try to find by name or index
-    if (!isNaN(doctorName)) {
-        selectedDoctor = users.doctors[parseInt(doctorName) - 1];
-    } else {
-        selectedDoctor = users.doctors.find(d => d.name.toLowerCase().includes(doctorName.toLowerCase()));
-    }
-    
-    if (!selectedDoctor) {
-        alert('Doctor not found');
-        return;
-    }
-    
-    const appointmentDate = prompt('Enter appointment date (YYYY-MM-DD):');
-    if (!appointmentDate) return;
-    
-    const appointmentTime = prompt('Enter appointment time (HH:MM AM/PM):');
-    if (!appointmentTime) return;
-    
-    // Create appointment
-    const newAppointment = {
-        id: appointments.length + 1,
-        patientId: currentUser.id,
-        patientName: currentUser.name,
-        doctorId: selectedDoctor.id,
-        doctorName: selectedDoctor.name,
-        specialization: selectedDoctor.specialization,
-        date: appointmentDate,
-        time: appointmentTime,
-        status: 'Scheduled',
-        notes: '',
-        medicineIds: []
-    };
-    
-    appointments.push(newAppointment);
-    alert('✅ Appointment booked successfully!\n\nDoctor: Dr. ' + selectedDoctor.name + 
-          '\nDate: ' + appointmentDate + '\nTime: ' + appointmentTime);
+    // First fetch doctors from API
+    fetch(`${API_BASE_URL}/doctors`)
+        .then(res => res.json())
+        .then(doctors => {
+            const doctorList = doctors.map((d, i) => (i+1) + '. Dr. ' + d.name + ' (' + d.specialization + ')').join('\n');
+            const doctorInput = prompt('Enter doctor number:\n\n' + doctorList);
+            
+            if (!doctorInput) return;
+            
+            const selectedDoctor = doctors[parseInt(doctorInput) - 1];
+            if (!selectedDoctor) {
+                alert('Invalid doctor selection');
+                return;
+            }
+            
+            const appointmentDate = prompt('Enter appointment date (YYYY-MM-DD):');
+            if (!appointmentDate) return;
+            
+            const appointmentTime = prompt('Enter appointment time (HH:MM AM/PM):');
+            if (!appointmentTime) return;
+            
+            // Book appointment via API
+            fetch(`${API_BASE_URL}/appointments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    patientId: currentUser.id,
+                    patientName: currentUser.name,
+                    doctorId: selectedDoctor.id,
+                    doctorName: selectedDoctor.name,
+                    specialization: selectedDoctor.specialization,
+                    date: appointmentDate,
+                    time: appointmentTime
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    alert('❌ ' + data.error);
+                    return;
+                }
+                alert('✅ Appointment booked successfully!\n\nDoctor: Dr. ' + selectedDoctor.name + 
+                      '\nDate: ' + appointmentDate + '\nTime: ' + appointmentTime);
+            })
+            .catch(err => {
+                alert('❌ Failed to book appointment');
+                console.error(err);
+            });
+        })
+        .catch(err => {
+            alert('❌ Failed to load doctors. Make sure backend is running.');
+            console.error(err);
+        });
 }
 
 // View Patients List - Doctor Feature
@@ -975,17 +959,25 @@ function showPatientsList(e) {
         return;
     }
     
-    // Get patients assigned to this doctor or all patients
-    const patientList = users.patients.map((p, index) => {
-        return (index + 1) + '. ' + p.name + ' (Email: ' + p.email + ', Age: ' + p.age + ', Gender: ' + p.gender + ')';
-    }).join('\n');
-    
-    if (patientList.length === 0) {
-        alert('No patients in the system');
-        return;
-    }
-    
-    alert('👥 PATIENTS LIST:\n\n' + patientList);
+    // Fetch patients from API
+    fetch(`${API_BASE_URL}/patients`)
+        .then(res => res.json())
+        .then(patients => {
+            if (patients.length === 0) {
+                alert('No patients in the system');
+                return;
+            }
+            
+            const patientList = patients.map((p, index) => {
+                return (index + 1) + '. ' + p.name + ' (Email: ' + p.email + ', Age: ' + p.age + ', Gender: ' + p.gender + ')';
+            }).join('\n');
+            
+            alert('👥 PATIENTS LIST:\n\n' + patientList);
+        })
+        .catch(err => {
+            alert('❌ Failed to load patients. Make sure backend is running.');
+            console.error(err);
+        });
 }
 
 // Logout

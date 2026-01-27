@@ -1,0 +1,73 @@
+QUICK START GUIDE - MediCare Backend Setup
+=============================================
+
+⚠️ IMPORTANT: Follow these steps in order!
+
+STEP 1: Install Node.js Dependencies
+-------------------------------------
+1. Open PowerShell/Command Prompt
+2. Navigate to project folder:
+   cd "c:\Users\Dell\Desktop\My html\MediCare"
+
+3. Install dependencies:
+   npm install
+
+   (This downloads express, sqlite3, and cors packages)
+
+---
+
+STEP 2: Start Backend Server
+----------------------------
+1. Keep the terminal open from Step 1
+2. Run:
+   npm start
+
+3. You should see:
+   ✅ MediCare Backend Server running on http://localhost:3001
+   📁 Database: ./medicare.db
+   🔌 CORS enabled for frontend
+
+   ⚠️ KEEP THIS TERMINAL OPEN - Don't close it!
+
+---
+
+STEP 3: Start Frontend (in NEW terminal)
+----------------------------------------
+1. Open a NEW PowerShell/Command Prompt window
+2. Navigate to project folder:
+   cd "c:\Users\Dell\Desktop\My html\MediCare"
+
+3. Start the frontend server:
+   npx http-server -p 8000
+
+4. You should see:
+   Starting up http-server, serving c:\Users\Dell\Desktop\My html\MediCare
+   Available on:
+   http://127.0.0.1:8000
+
+---
+
+STEP 4: Use the Application
+----------------------------
+1. Open browser
+2. Go to: http://127.0.0.1:8000
+3. Click "Patient Login" or "Doctor Login"
+4. Register with Name, Email, Password
+5. Login and enjoy!
+
+---
+
+✅ BOTH SERVERS MUST BE RUNNING!
+- Terminal 1: Backend (port 3001) - DO NOT CLOSE
+- Terminal 2: Frontend (port 8000) - DO NOT CLOSE
+
+---
+
+COMMON ISSUES:
+- Port 3001 already in use? Check if backend is already running
+- "Cannot connect to backend"? Make sure Step 2 terminal is still running
+- Database error? Delete medicare.db and restart backend
+
+---
+
+Need help? Check README.md for more details!
