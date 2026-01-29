@@ -1191,14 +1191,103 @@ function submitAppointmentBooking(e) {
         // Reset form
         document.querySelector('.appointment-form').reset();
         
-        // Go back to home
-        backToHome();
+        // Show the new appointment in the list
+        setTimeout(() => {
+            showMyAppointments();
+        }, 500);
     })
     .catch(err => {
         const errorMsg = err.error || err.message || 'Failed to book appointment';
         alert('❌ ' + errorMsg);
         console.error('Booking error:', err);
     });
+}
+
+// View My Appointments
+function showMyAppointments() {
+    if (!currentUser || currentUserType !== 'patient') {
+        alert('Please login as a patient to view appointments');
+        return;
+    }
+    
+    // Hide home sections
+    const homeEl = document.getElementById('home');
+    const aboutEl = document.getElementById('about');
+    const servicesEl = document.getElementById('services');
+    const contactEl = document.getElementById('contact');
+    
+    if (homeEl) homeEl.style.display = 'none';
+    if (aboutEl) aboutEl.style.display = 'none';
+    if (servicesEl) servicesEl.style.display = 'none';
+    if (contactEl) contactEl.style.display = 'none';
+    
+    // Show appointments page
+    const appointmentView = document.getElementById('appointmentViewPage');
+    if (appointmentView) {
+        appointmentView.style.display = 'block';
+    }
+    
+    // Fetch appointments from API
+    fetch(`${API_BASE_URL}/appointments?patientId=${currentUser.id}`)
+        .then(res => res.json())
+        .then(appointments => {
+            const appointmentsList = document.getElementById('appointmentsList');
+            
+            if (!appointments || appointments.length === 0) {
+                appointmentsList.innerHTML = '<p class="no-appointments">No appointments scheduled yet.</p>';
+                return;
+            }
+            
+            // Group appointments by status
+            const upcoming = appointments.filter(apt => new Date(apt.date) >= new Date());
+            const past = appointments.filter(apt => new Date(apt.date) < new Date());
+            
+            let html = '';
+            
+            if (upcoming.length > 0) {
+                html += '<h3 class="appointments-section-title">📅 Upcoming Appointments</h3>';
+                html += '<div class="appointments-grid">';
+                upcoming.forEach(apt => {
+                    html += `
+                        <div class="appointment-card">
+                            <div class="appointment-status">Scheduled</div>
+                            <div class="appointment-content">
+                                <h4>Dr. ${apt.doctorName}</h4>
+                                <p class="appointment-detail"><strong>Date:</strong> ${apt.date}</p>
+                                <p class="appointment-detail"><strong>Time:</strong> ${apt.time}</p>
+                                <p class="appointment-detail"><strong>Reason:</strong> ${apt.reason || 'Not specified'}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            if (past.length > 0) {
+                html += '<h3 class="appointments-section-title" style="margin-top: 2rem;">✅ Past Appointments</h3>';
+                html += '<div class="appointments-grid">';
+                past.forEach(apt => {
+                    html += `
+                        <div class="appointment-card completed">
+                            <div class="appointment-status">Completed</div>
+                            <div class="appointment-content">
+                                <h4>Dr. ${apt.doctorName}</h4>
+                                <p class="appointment-detail"><strong>Date:</strong> ${apt.date}</p>
+                                <p class="appointment-detail"><strong>Time:</strong> ${apt.time}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            appointmentsList.innerHTML = html;
+        })
+        .catch(err => {
+            console.error('Error fetching appointments:', err);
+            const appointmentsList = document.getElementById('appointmentsList');
+            appointmentsList.innerHTML = '<p class="error">Failed to load appointments. Please try again.</p>';
+        });
 }
 
 updateNavBar();

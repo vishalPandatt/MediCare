@@ -48,6 +48,7 @@
                 <!-- Buttons for logged-in patients -->
                 <div id="patientButtons" class="button-group" style="display: none;">
                     <button class="btn btn-primary" onclick="showBookAppointment(event)">📅 Book Appointment</button>
+                    <button class="btn btn-secondary" onclick="showMyAppointments(event)">📋 My Appointments</button>
                 </div>
                 
                 <!-- Buttons for logged-in doctors -->
@@ -180,6 +181,21 @@
 
                     <button type="submit" class="btn btn-primary">Book Appointment</button>
                 </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- View Appointments Page -->
+    <section id="appointmentViewPage" class="appointment-view-page" style="display: none;">
+        <div class="container">
+            <div class="appointments-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>My Appointments</h1>
+            </div>
+            <div class="appointments-list-container">
+                <div id="appointmentsList" class="appointments-list">
+                    <p class="loading">Loading appointments...</p>
+                </div>
             </div>
         </div>
     </section>
