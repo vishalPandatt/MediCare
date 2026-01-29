@@ -906,13 +906,11 @@ function viewUserProfile(e) {
     const aboutEl = document.getElementById('about');
     const servicesEl = document.getElementById('services');
     const contactEl = document.getElementById('contact');
-    const footerEl = document.getElementById('footer');
     
     if (homeEl) homeEl.style.display = 'none';
     if (aboutEl) aboutEl.style.display = 'none';
     if (servicesEl) servicesEl.style.display = 'none';
     if (contactEl) contactEl.style.display = 'none';
-    if (footerEl) footerEl.style.display = 'none';
     
     // Show profile page
     const profilePage = document.getElementById('userProfilePage');
@@ -978,14 +976,12 @@ function backToHome() {
     const aboutEl = document.getElementById('about');
     const servicesEl = document.getElementById('services');
     const contactEl = document.getElementById('contact');
-    const footerEl = document.getElementById('footer');
     const profilePageEl = document.getElementById('userProfilePage');
     
     if (homeEl) homeEl.style.display = 'block';
     if (aboutEl) aboutEl.style.display = 'block';
     if (servicesEl) servicesEl.style.display = 'block';
     if (contactEl) contactEl.style.display = 'block';
-    if (footerEl) footerEl.style.display = 'block';
     
     // Hide profile page
     if (profilePageEl) profilePageEl.style.display = 'none';
@@ -1000,17 +996,14 @@ function showHome() {
     const aboutEl = document.getElementById('about');
     const servicesEl = document.getElementById('services');
     const contactEl = document.getElementById('contact');
-    const footerEl = document.getElementById('footer');
     const profilePageEl = document.getElementById('userProfilePage');
     
     if (homeEl) homeEl.style.display = 'block';
     if (aboutEl) aboutEl.style.display = 'block';
     if (servicesEl) servicesEl.style.display = 'block';
     if (contactEl) contactEl.style.display = 'block';
-    if (footerEl) footerEl.style.display = 'block';
     if (profilePageEl) profilePageEl.style.display = 'none';
     window.scrollTo(0, 0);
-}
 }
 
 // Book Appointment - Patient Feature
