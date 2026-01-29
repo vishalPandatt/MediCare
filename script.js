@@ -13,6 +13,43 @@ let medicines = [];
 let currentUser = null;
 let currentUserType = null;
 
+// ==========================================
+// LocalStorage Session Management
+// ==========================================
+
+function saveUserSession(user, userType) {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('currentUserType', userType);
+    console.log('✅ User session saved to localStorage');
+}
+
+function loadUserSession() {
+    try {
+        const savedUser = localStorage.getItem('currentUser');
+        const savedUserType = localStorage.getItem('currentUserType');
+        
+        if (savedUser && savedUserType) {
+            currentUser = JSON.parse(savedUser);
+            currentUserType = savedUserType;
+            console.log('✅ User session restored from localStorage');
+            console.log('Welcome back, ' + currentUser.name);
+            return true;
+        }
+    } catch (err) {
+        console.error('Error loading user session:', err);
+        clearUserSession();
+    }
+    return false;
+}
+
+function clearUserSession() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUserType');
+    currentUser = null;
+    currentUserType = null;
+    console.log('✅ User session cleared');
+}
+
 // Modal Functions
 function showLoginModal(e) {
     if (e) e.preventDefault();
@@ -122,6 +159,8 @@ function handlePatientLogin(e) {
         }
         currentUser = data.user;
         currentUserType = data.userType;
+        // Save to localStorage so user doesn't need to login again
+        saveUserSession(currentUser, currentUserType);
         closeFullScreenLogin();
         updateNavBar();
         showHome();
@@ -159,6 +198,8 @@ function handleDoctorLogin(e) {
         }
         currentUser = data.user;
         currentUserType = data.userType;
+        // Save to localStorage so user doesn't need to login again
+        saveUserSession(currentUser, currentUserType);
         closeFullScreenLogin();
         updateNavBar();
         showHome();
@@ -1019,8 +1060,8 @@ function handleLogout(e) {
     e.preventDefault();
     
     if (confirm('Are you sure you want to logout?')) {
-        currentUser = null;
-        currentUserType = null;
+        // Clear from localStorage
+        clearUserSession();
         updateNavBar();
         showHome();
         alert('You have been logged out successfully');
@@ -1037,4 +1078,12 @@ document.addEventListener('click', function(event) {
 
 // Initialize
 console.log('MediCare Website Loaded');
+
+// Try to restore user session from localStorage on page load
+if (loadUserSession()) {
+    updateNavBar();
+    showHome();
+} else {
+    updateNavBar();
+}
 updateNavBar();
