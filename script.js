@@ -1015,58 +1015,55 @@ function showBookAppointment(e) {
         return;
     }
     
-    // First fetch doctors from API
+    // Hide home sections
+    const homeEl = document.getElementById('home');
+    const aboutEl = document.getElementById('about');
+    const servicesEl = document.getElementById('services');
+    const contactEl = document.getElementById('contact');
+    
+    if (homeEl) homeEl.style.display = 'none';
+    if (aboutEl) aboutEl.style.display = 'none';
+    if (servicesEl) servicesEl.style.display = 'none';
+    if (contactEl) contactEl.style.display = 'none';
+    
+    // Show appointment booking page
+    const bookingPage = document.getElementById('appointmentBookingPage');
+    if (bookingPage) {
+        bookingPage.style.display = 'block';
+    }
+    
+    // Fill user info
+    const appointmentName = document.getElementById('appointmentName');
+    const appointmentEmail = document.getElementById('appointmentEmail');
+    const appointmentAge = document.getElementById('appointmentAge');
+    const appointmentPhone = document.getElementById('appointmentPhone');
+    
+    if (appointmentName) appointmentName.value = currentUser.name || '';
+    if (appointmentEmail) appointmentEmail.value = currentUser.email || '';
+    if (appointmentAge) appointmentAge.value = currentUser.age || '';
+    if (appointmentPhone) appointmentPhone.value = currentUser.phone || '';
+    
+    // Load doctors into dropdown
     fetch(`${API_BASE_URL}/doctors`)
         .then(res => res.json())
         .then(doctors => {
-            const doctorList = doctors.map((d, i) => (i+1) + '. Dr. ' + d.name + ' (' + d.specialization + ')').join('\n');
-            const doctorInput = prompt('Enter doctor number:\n\n' + doctorList);
+            const doctorSelect = document.getElementById('appointmentDoctor');
+            if (!doctorSelect) return;
             
-            if (!doctorInput) return;
-            
-            const selectedDoctor = doctors[parseInt(doctorInput) - 1];
-            if (!selectedDoctor) {
-                alert('Invalid doctor selection');
-                return;
-            }
-            
-            const appointmentDate = prompt('Enter appointment date (YYYY-MM-DD):');
-            if (!appointmentDate) return;
-            
-            const appointmentTime = prompt('Enter appointment time (HH:MM AM/PM):');
-            if (!appointmentTime) return;
-            
-            // Book appointment via API
-            fetch(`${API_BASE_URL}/appointments`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    patientId: currentUser.id,
-                    patientName: currentUser.name,
-                    doctorId: selectedDoctor.id,
-                    doctorName: selectedDoctor.name,
-                    specialization: selectedDoctor.specialization,
-                    date: appointmentDate,
-                    time: appointmentTime
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    alert('❌ ' + data.error);
-                    return;
-                }
-                alert('✅ Appointment booked successfully!\n\nDoctor: Dr. ' + selectedDoctor.name + 
-                      '\nDate: ' + appointmentDate + '\nTime: ' + appointmentTime);
-            })
-            .catch(err => {
-                alert('❌ Failed to book appointment');
-                console.error(err);
+            doctorSelect.innerHTML = '<option value="">Select a Doctor</option>';
+            doctors.forEach(doctor => {
+                const option = document.createElement('option');
+                option.value = doctor.id;
+                option.textContent = 'Dr. ' + doctor.name + ' (' + doctor.specialization + ')';
+                doctorSelect.appendChild(option);
             });
         })
         .catch(err => {
-            alert('❌ Failed to load doctors. Make sure backend is running.');
-            console.error(err);
+            console.error('Failed to load doctors:', err);
+            const doctorSelect = document.getElementById('appointmentDoctor');
+            if (doctorSelect) {
+                doctorSelect.innerHTML = '<option value="">Error loading doctors</option>';
+            }
         });
 }
 
@@ -1131,4 +1128,77 @@ if (loadUserSession()) {
 } else {
     updateNavBar();
 }
+
+// Submit appointment booking
+function submitAppointmentBooking(e) {
+    e.preventDefault();
+    
+    if (!currentUser || currentUserType !== 'patient') {
+        alert('Please login as a patient');
+        return;
+    }
+    
+    // Get form values
+    const doctorId = document.getElementById('appointmentDoctor').value;
+    const appointmentDate = document.getElementById('appointmentDate').value;
+    const appointmentTime = document.getElementById('appointmentTime').value;
+    const appointmentReason = document.getElementById('appointmentReason').value;
+    const appointmentAge = document.getElementById('appointmentAge').value;
+    const appointmentGender = document.getElementById('appointmentGender').value;
+    const appointmentPhone = document.getElementById('appointmentPhone').value;
+    
+    if (!doctorId || !appointmentDate || !appointmentTime || !appointmentReason) {
+        alert('❌ Please fill in all fields');
+        return;
+    }
+    
+    // Find selected doctor name
+    const doctorSelect = document.getElementById('appointmentDoctor');
+    const selectedOption = doctorSelect.options[doctorSelect.selectedIndex];
+    const doctorName = selectedOption.text.split('(')[0].replace('Dr. ', '').trim();
+    
+    // Book appointment via API
+    fetch(`${API_BASE_URL}/appointments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            patientId: currentUser.id,
+            patientName: currentUser.name,
+            doctorId: parseInt(doctorId),
+            doctorName: doctorName,
+            date: appointmentDate,
+            time: appointmentTime,
+            reason: appointmentReason,
+            age: appointmentAge,
+            gender: appointmentGender,
+            phone: appointmentPhone
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(data => Promise.reject(data));
+        }
+        return res.json();
+    })
+    .then(data => {
+        if (data.error) {
+            alert('❌ ' + data.error);
+            return;
+        }
+        alert('✅ Appointment booked successfully!\n\nDoctor: ' + doctorName + 
+              '\nDate: ' + appointmentDate + '\nTime: ' + appointmentTime);
+        
+        // Reset form
+        document.querySelector('.appointment-form').reset();
+        
+        // Go back to home
+        backToHome();
+    })
+    .catch(err => {
+        const errorMsg = err.error || err.message || 'Failed to book appointment';
+        alert('❌ ' + errorMsg);
+        console.error('Booking error:', err);
+    });
+}
+
 updateNavBar();

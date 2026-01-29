@@ -116,6 +116,74 @@
         </div>
     </section>
 
+    <!-- Book Appointment Page -->
+    <section id="appointmentBookingPage" class="appointment-booking-page" style="display: none;">
+        <div class="container">
+            <div class="booking-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>Book an Appointment</h1>
+            </div>
+            <div class="booking-card">
+                <form onsubmit="submitAppointmentBooking(event)" class="appointment-form">
+                    <!-- Patient Info -->
+                    <div class="form-section">
+                        <h3>Your Information</h3>
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" id="appointmentName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="appointmentEmail" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Age:</label>
+                            <input type="number" id="appointmentAge" placeholder="Enter your age" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender:</label>
+                            <select id="appointmentGender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number:</label>
+                            <input type="tel" id="appointmentPhone" placeholder="Enter your phone number" required>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="form-section">
+                        <h3>Appointment Details</h3>
+                        <div class="form-group">
+                            <label>Select Doctor:</label>
+                            <select id="appointmentDoctor" required>
+                                <option value="">Loading doctors...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Appointment Date:</label>
+                            <input type="date" id="appointmentDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Appointment Time:</label>
+                            <input type="time" id="appointmentTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Reason for Appointment:</label>
+                            <textarea id="appointmentReason" placeholder="Describe your symptoms or reason for visit" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
