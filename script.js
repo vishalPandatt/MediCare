@@ -856,6 +856,12 @@ function updateNavBar() {
     const patientButtons = document.getElementById('patientButtons');
     const doctorButtons = document.getElementById('doctorButtons');
     
+    // Check if elements exist before using them
+    if (!loginItem || !userItem || !guestButtons || !patientButtons || !doctorButtons) {
+        console.warn('⚠️ Navigation elements not found in DOM');
+        return;
+    }
+    
     if (currentUser) {
         loginItem.style.display = 'none';
         userItem.style.display = 'block';
@@ -895,56 +901,94 @@ function viewUserProfile(e) {
         return;
     }
     
-    // Hide main sections
-    document.getElementById('home').style.display = 'none';
-    document.getElementById('about').style.display = 'none';
-    document.getElementById('services').style.display = 'none';
-    document.getElementById('contact').style.display = 'none';
-    document.getElementById('footer').style.display = 'none';
+    // Hide main sections - check if elements exist first
+    const homeEl = document.getElementById('home');
+    const aboutEl = document.getElementById('about');
+    const servicesEl = document.getElementById('services');
+    const contactEl = document.getElementById('contact');
+    const footerEl = document.getElementById('footer');
+    
+    if (homeEl) homeEl.style.display = 'none';
+    if (aboutEl) aboutEl.style.display = 'none';
+    if (servicesEl) servicesEl.style.display = 'none';
+    if (contactEl) contactEl.style.display = 'none';
+    if (footerEl) footerEl.style.display = 'none';
     
     // Show profile page
     const profilePage = document.getElementById('userProfilePage');
+    if (!profilePage) {
+        console.error('❌ Profile page element not found');
+        return;
+    }
     profilePage.style.display = 'block';
     
     // Populate profile data - use textContent to set values
     setTimeout(function() {
-        document.getElementById('profileName').textContent = currentUser.name;
-        document.getElementById('profileEmail').textContent = currentUser.email;
-        document.getElementById('profileType').textContent = currentUserType === 'patient' ? 'Patient' : 'Doctor';
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileType = document.getElementById('profileType');
+        
+        if (profileName) profileName.textContent = currentUser.name;
+        if (profileEmail) profileEmail.textContent = currentUser.email;
+        if (profileType) profileType.textContent = currentUserType === 'patient' ? 'Patient' : 'Doctor';
         
         if (currentUserType === 'patient') {
-            document.getElementById('patientDetails').style.display = 'block';
-            document.getElementById('doctorDetails').style.display = 'none';
+            const patientDet = document.getElementById('patientDetails');
+            const doctorDet = document.getElementById('doctorDetails');
             
-            document.getElementById('profileAge').textContent = currentUser.age || 'Not Provided';
-            document.getElementById('profileGender').textContent = currentUser.gender || 'Not Provided';
-            document.getElementById('profileBloodType').textContent = currentUser.bloodType || 'Not Provided';
-            document.getElementById('profilePhone').textContent = currentUser.phone || 'Not Provided';
+            if (patientDet) patientDet.style.display = 'block';
+            if (doctorDet) doctorDet.style.display = 'none';
+            
+            const profileAge = document.getElementById('profileAge');
+            const profileGender = document.getElementById('profileGender');
+            const profileBloodType = document.getElementById('profileBloodType');
+            const profilePhone = document.getElementById('profilePhone');
+            
+            if (profileAge) profileAge.textContent = currentUser.age || 'Not Provided';
+            if (profileGender) profileGender.textContent = currentUser.gender || 'Not Provided';
+            if (profileBloodType) profileBloodType.textContent = currentUser.bloodType || 'Not Provided';
+            if (profilePhone) profilePhone.textContent = currentUser.phone || 'Not Provided';
         } else {
-            document.getElementById('patientDetails').style.display = 'none';
-            document.getElementById('doctorDetails').style.display = 'block';
+            const patientDet = document.getElementById('patientDetails');
+            const doctorDet = document.getElementById('doctorDetails');
             
-            document.getElementById('profileSpecialization').textContent = currentUser.specialization || 'Not Provided';
-            document.getElementById('profileLicense').textContent = currentUser.license || 'Not Provided';
-            document.getElementById('profileDoctorPhone').textContent = currentUser.phone || 'Not Provided';
+            if (patientDet) patientDet.style.display = 'none';
+            if (doctorDet) doctorDet.style.display = 'block';
+            
+            const profileSpecialization = document.getElementById('profileSpecialization');
+            const profileLicense = document.getElementById('profileLicense');
+            const profileDoctorPhone = document.getElementById('profileDoctorPhone');
+            
+            if (profileSpecialization) profileSpecialization.textContent = currentUser.specialization || 'Not Provided';
+            if (profileLicense) profileLicense.textContent = currentUser.license || 'Not Provided';
+            if (profileDoctorPhone) profileDoctorPhone.textContent = currentUser.phone || 'Not Provided';
         }
     }, 100);
     
     // Close dropdown menu
-    document.getElementById('userDropdownMenu').classList.remove('show');
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+    if (dropdownMenu) dropdownMenu.classList.remove('show');
+
 }
 
 // Back to Home
 function backToHome() {
-    // Show main sections
-    document.getElementById('home').style.display = 'block';
-    document.getElementById('about').style.display = 'block';
-    document.getElementById('services').style.display = 'block';
-    document.getElementById('contact').style.display = 'block';
-    document.getElementById('footer').style.display = 'block';
+    // Show main sections - check if elements exist
+    const homeEl = document.getElementById('home');
+    const aboutEl = document.getElementById('about');
+    const servicesEl = document.getElementById('services');
+    const contactEl = document.getElementById('contact');
+    const footerEl = document.getElementById('footer');
+    const profilePageEl = document.getElementById('userProfilePage');
+    
+    if (homeEl) homeEl.style.display = 'block';
+    if (aboutEl) aboutEl.style.display = 'block';
+    if (servicesEl) servicesEl.style.display = 'block';
+    if (contactEl) contactEl.style.display = 'block';
+    if (footerEl) footerEl.style.display = 'block';
     
     // Hide profile page
-    document.getElementById('userProfilePage').style.display = 'none';
+    if (profilePageEl) profilePageEl.style.display = 'none';
     
     // Scroll to top
     window.scrollTo(0, 0);
@@ -952,13 +996,21 @@ function backToHome() {
 
 // Show Home
 function showHome() {
-    document.getElementById('home').style.display = 'block';
-    document.getElementById('about').style.display = 'block';
-    document.getElementById('services').style.display = 'block';
-    document.getElementById('contact').style.display = 'block';
-    document.getElementById('footer').style.display = 'block';
-    document.getElementById('userProfilePage').style.display = 'none';
+    const homeEl = document.getElementById('home');
+    const aboutEl = document.getElementById('about');
+    const servicesEl = document.getElementById('services');
+    const contactEl = document.getElementById('contact');
+    const footerEl = document.getElementById('footer');
+    const profilePageEl = document.getElementById('userProfilePage');
+    
+    if (homeEl) homeEl.style.display = 'block';
+    if (aboutEl) aboutEl.style.display = 'block';
+    if (servicesEl) servicesEl.style.display = 'block';
+    if (contactEl) contactEl.style.display = 'block';
+    if (footerEl) footerEl.style.display = 'block';
+    if (profilePageEl) profilePageEl.style.display = 'none';
     window.scrollTo(0, 0);
+}
 }
 
 // Book Appointment - Patient Feature
