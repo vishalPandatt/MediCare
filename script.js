@@ -137,8 +137,10 @@ function switchRegTab(e, tab) {
 // Login Functions
 function handlePatientLogin(e) {
     e.preventDefault();
-    const email = e.target.querySelector('input[type="email"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
+    let email = e.target.querySelector('input[type="email"]').value || '';
+    let password = e.target.querySelector('input[type="password"]').value || '';
+    email = email.trim().toLowerCase();
+    password = password.trim();
 
     // Login via API
     fetch(`${API_BASE_URL}/patients/login`, {
@@ -176,8 +178,10 @@ function handlePatientLogin(e) {
 
 function handleDoctorLogin(e) {
     e.preventDefault();
-    const email = e.target.querySelector('input[type="email"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
+    let email = e.target.querySelector('input[type="email"]').value || '';
+    let password = e.target.querySelector('input[type="password"]').value || '';
+    email = email.trim().toLowerCase();
+    password = password.trim();
 
     // Login via API
     fetch(`${API_BASE_URL}/doctors/login`, {
@@ -220,8 +224,10 @@ function handlePatientRegister(e) {
     const inputs = form.querySelectorAll('input');
     
     const name = inputs[0].value;
-    const email = inputs[1].value;
-    const password = inputs[2].value;
+    let email = inputs[1].value || '';
+    let password = inputs[2].value || '';
+    email = email.trim().toLowerCase();
+    password = password.trim();
     const confirmPassword = inputs[3].value;
 
     if (!name || !email || !password) {
@@ -251,10 +257,34 @@ function handlePatientRegister(e) {
             alert('❌ ' + data.error);
             return;
         }
-        alert('✅ Registration successful! Please login with your email and password.');
-        document.getElementById('registerModal').classList.remove('show');
-        document.getElementById('fullScreenLoginPage').classList.add('show');
-        form.reset();
+        // Auto-login after successful registration
+        fetch(`${API_BASE_URL}/patients/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        })
+        .then(res => {
+            if (!res.ok) return res.json().then(d => Promise.reject(d));
+            return res.json();
+        })
+        .then(loginData => {
+            currentUser = loginData.user;
+            currentUserType = loginData.userType;
+            saveUserSession(currentUser, currentUserType);
+            document.getElementById('registerModal').classList.remove('show');
+            closeFullScreenLogin();
+            updateNavBar();
+            showHome();
+            alert('✅ Registered and logged in as ' + currentUser.name);
+            form.reset();
+        })
+        .catch(err => {
+            console.error('Auto-login failed after registration:', err);
+            alert('✅ Registration successful! Please login with your email and password.');
+            document.getElementById('registerModal').classList.remove('show');
+            document.getElementById('fullScreenLoginPage').classList.add('show');
+            form.reset();
+        });
     })
     .catch(err => {
         const errorMsg = err.error || err.message || 'Registration failed';
@@ -269,8 +299,10 @@ function handleDoctorRegister(e) {
     const inputs = form.querySelectorAll('input');
     
     const name = inputs[0].value;
-    const email = inputs[1].value;
-    const password = inputs[2].value;
+    let email = inputs[1].value || '';
+    let password = inputs[2].value || '';
+    email = email.trim().toLowerCase();
+    password = password.trim();
     const confirmPassword = inputs[3].value;
 
     if (!name || !email || !password) {
@@ -300,10 +332,34 @@ function handleDoctorRegister(e) {
             alert('❌ ' + data.error);
             return;
         }
-        alert('✅ Registration successful! Please login with your email and password.');
-        document.getElementById('registerModal').classList.remove('show');
-        document.getElementById('fullScreenLoginPage').classList.add('show');
-        form.reset();
+        // Auto-login after successful doctor registration
+        fetch(`${API_BASE_URL}/doctors/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        })
+        .then(res => {
+            if (!res.ok) return res.json().then(d => Promise.reject(d));
+            return res.json();
+        })
+        .then(loginData => {
+            currentUser = loginData.user;
+            currentUserType = loginData.userType;
+            saveUserSession(currentUser, currentUserType);
+            document.getElementById('registerModal').classList.remove('show');
+            closeFullScreenLogin();
+            updateNavBar();
+            showHome();
+            alert('✅ Registered and logged in as ' + currentUser.name);
+            form.reset();
+        })
+        .catch(err => {
+            console.error('Auto-login failed after doctor registration:', err);
+            alert('✅ Registration successful! Please login with your email and password.');
+            document.getElementById('registerModal').classList.remove('show');
+            document.getElementById('fullScreenLoginPage').classList.add('show');
+            form.reset();
+        });
     })
     .catch(err => {
         const errorMsg = err.error || err.message || 'Registration failed';
@@ -1251,18 +1307,22 @@ function showMyAppointments(e) {
             
             let html = '';
             
+            const isDoctorView = currentUserType === 'doctor';
+
             if (upcoming.length > 0) {
                 html += '<h3 class="appointments-section-title">📅 Upcoming Appointments</h3>';
                 html += '<div class="appointments-grid">';
                 upcoming.forEach(apt => {
+                    const title = isDoctorView ? (apt.patientName ? apt.patientName : 'Patient') : ('Dr. ' + (apt.doctorName || 'Doctor'));
+                    const extraLine = isDoctorView ? `<p class="appointment-detail"><strong>Patient:</strong> ${apt.patientName || 'Unknown'}</p>` : `<p class="appointment-detail"><strong>Reason:</strong> ${apt.reason || 'Not specified'}</p>`;
                     html += `
                         <div class="appointment-card">
                             <div class="appointment-status">Scheduled</div>
                             <div class="appointment-content">
-                                <h4>Dr. ${apt.doctorName}</h4>
+                                <h4>${title}</h4>
                                 <p class="appointment-detail"><strong>Date:</strong> ${apt.date}</p>
                                 <p class="appointment-detail"><strong>Time:</strong> ${apt.time}</p>
-                                <p class="appointment-detail"><strong>Reason:</strong> ${apt.reason || 'Not specified'}</p>
+                                ${extraLine}
                             </div>
                         </div>
                     `;
@@ -1274,11 +1334,12 @@ function showMyAppointments(e) {
                 html += '<h3 class="appointments-section-title" style="margin-top: 2rem;">✅ Past Appointments</h3>';
                 html += '<div class="appointments-grid">';
                 past.forEach(apt => {
+                    const title = isDoctorView ? (apt.patientName ? apt.patientName : 'Patient') : ('Dr. ' + (apt.doctorName || 'Doctor'));
                     html += `
                         <div class="appointment-card completed">
                             <div class="appointment-status">Completed</div>
                             <div class="appointment-content">
-                                <h4>Dr. ${apt.doctorName}</h4>
+                                <h4>${title}</h4>
                                 <p class="appointment-detail"><strong>Date:</strong> ${apt.date}</p>
                                 <p class="appointment-detail"><strong>Time:</strong> ${apt.time}</p>
                             </div>
