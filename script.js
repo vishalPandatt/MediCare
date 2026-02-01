@@ -1204,35 +1204,42 @@ function submitAppointmentBooking(e) {
 }
 
 // View My Appointments
-function showMyAppointments() {
-    if (!currentUser || currentUserType !== 'patient') {
-        alert('Please login as a patient to view appointments');
+function showMyAppointments(e) {
+    if (e) e.preventDefault();
+
+    if (!currentUser) {
+        alert('Please login to view appointments');
         return;
     }
-    
+
     // Hide home sections
     const homeEl = document.getElementById('home');
     const aboutEl = document.getElementById('about');
     const servicesEl = document.getElementById('services');
     const contactEl = document.getElementById('contact');
-    
+
     if (homeEl) homeEl.style.display = 'none';
     if (aboutEl) aboutEl.style.display = 'none';
     if (servicesEl) servicesEl.style.display = 'none';
     if (contactEl) contactEl.style.display = 'none';
-    
+
     // Show appointments page
     const appointmentView = document.getElementById('appointmentViewPage');
-    if (appointmentView) {
-        appointmentView.style.display = 'block';
+    if (appointmentView) appointmentView.style.display = 'block';
+
+    // Build query based on user type
+    let query = '';
+    if (currentUserType === 'patient') {
+        query = `?patientId=${encodeURIComponent(currentUser.id)}`;
+    } else if (currentUserType === 'doctor') {
+        query = `?doctorId=${encodeURIComponent(currentUser.id)}`;
     }
-    
+
     // Fetch appointments from API
-    fetch(`${API_BASE_URL}/appointments?patientId=${currentUser.id}`)
+    fetch(`${API_BASE_URL}/appointments${query}`)
         .then(res => res.json())
         .then(appointments => {
             const appointmentsList = document.getElementById('appointmentsList');
-            
             if (!appointments || appointments.length === 0) {
                 appointmentsList.innerHTML = '<p class="no-appointments">No appointments scheduled yet.</p>';
                 return;
