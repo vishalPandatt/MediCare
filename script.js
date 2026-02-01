@@ -50,6 +50,146 @@ function clearUserSession() {
     console.log('✅ User session cleared');
 }
 
+// ==========================================
+// Dropdown Menu Management
+// ==========================================
+
+function toggleDropdown(e, dropdownId) {
+    e.preventDefault();
+    const dropdown = document.getElementById(dropdownId);
+    if (!dropdown) return;
+    dropdown.classList.toggle('show');
+    
+    // Close other dropdowns
+    const allDropdowns = document.querySelectorAll('.dropdown-menu.show');
+    allDropdowns.forEach(d => {
+        if (d.id !== dropdownId) d.classList.remove('show');
+    });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdowns = document.querySelectorAll('.dropdown-menu.show');
+    dropdowns.forEach(dropdown => {
+        if (!dropdown.closest('.nav-item-dropdown')) {
+            dropdown.classList.remove('show');
+        }
+    });
+});
+
+// ==========================================
+// Service Navigation Functions
+// ==========================================
+
+function showPatientLogin(e) {
+    if (e) e.preventDefault();
+    // Hide main sections
+    hideAllPages();
+    
+    const page = document.getElementById('fullScreenLoginPage');
+    if (page) {
+        page.classList.add('show');
+        // Switch to patient tab
+        const patientTab = document.getElementById('fs-patient');
+        if (patientTab) patientTab.classList.add('active');
+    }
+}
+
+function showPatientSignup(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    
+    const page = document.getElementById('registerModal');
+    if (page) {
+        page.classList.add('show');
+        // Switch to patient tab
+        const patientTab = document.getElementById('patient-reg');
+        if (patientTab) patientTab.classList.add('active');
+    }
+}
+
+function showPatientDashboard(e) {
+    if (e) e.preventDefault();
+    if (!currentUser || currentUserType !== 'patient') {
+        alert('Please login as a patient to access dashboard');
+        return;
+    }
+    hideAllPages();
+    const dash = document.getElementById('patientDashboard');
+    if (dash) dash.classList.remove('hidden');
+}
+
+function showDoctorLogin(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    
+    const page = document.getElementById('fullScreenLoginPage');
+    if (page) {
+        page.classList.add('show');
+        // Switch to doctor tab
+        const doctorTab = document.getElementById('fs-doctor');
+        if (doctorTab) doctorTab.classList.add('active');
+    }
+}
+
+function showDoctorSignup(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    
+    const page = document.getElementById('registerModal');
+    if (page) {
+        page.classList.add('show');
+        // Switch to doctor tab
+        const doctorTab = document.getElementById('doctor-reg');
+        if (doctorTab) doctorTab.classList.add('active');
+    }
+}
+
+function showDoctorProfile(e) {
+    if (e) e.preventDefault();
+    if (!currentUser || currentUserType !== 'doctor') {
+        alert('Please login as a doctor to view profile');
+        return;
+    }
+    // Show doctor's own profile
+    openDoctorProfile(currentUser.id);
+}
+
+function showAppointmentService(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    document.getElementById('appointmentServicePage').style.display = 'block';
+}
+
+function showEmergencyService(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    document.getElementById('emergencyServicePage').style.display = 'block';
+}
+
+function showAmbulanceService(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    document.getElementById('ambulanceServicePage').style.display = 'block';
+}
+
+function showMedicalService(e) {
+    if (e) e.preventDefault();
+    hideAllPages();
+    document.getElementById('medicalServicePage').style.display = 'block';
+}
+
+function hideAllPages() {
+    const pageIds = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard','doctorPatientsPage','doctorProfilePage','appointmentServicePage','emergencyServicePage','ambulanceServicePage','medicalServicePage','fullScreenLoginPage','registerModal'];
+    pageIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.style.display = 'none';
+            el.classList.remove('show', 'hidden');
+        }
+    });
+}
+
 // Modal Functions
 function showLoginModal(e) {
     if (e) e.preventDefault();
@@ -1033,14 +1173,24 @@ function backToHome() {
     const servicesEl = document.getElementById('services');
     const contactEl = document.getElementById('contact');
     const profilePageEl = document.getElementById('userProfilePage');
+    const expertSection = document.getElementById('expertDoctorsSection');
+    const doctorPatientsPage = document.getElementById('doctorPatientsPage');
+    const doctorProfilePage = document.getElementById('doctorProfilePage');
+    const appointmentBookingPage = document.getElementById('appointmentBookingPage');
+    const appointmentViewPage = document.getElementById('appointmentViewPage');
     
     if (homeEl) homeEl.style.display = 'block';
     if (aboutEl) aboutEl.style.display = 'block';
     if (servicesEl) servicesEl.style.display = 'block';
     if (contactEl) contactEl.style.display = 'block';
     
-    // Hide profile page
+    // Hide profile & other pages
     if (profilePageEl) profilePageEl.style.display = 'none';
+    if (expertSection) expertSection.style.display = 'none';
+    if (doctorPatientsPage) doctorPatientsPage.style.display = 'none';
+    if (doctorProfilePage) doctorProfilePage.style.display = 'none';
+    if (appointmentBookingPage) appointmentBookingPage.style.display = 'none';
+    if (appointmentViewPage) appointmentViewPage.style.display = 'none';
     
     // Scroll to top
     window.scrollTo(0, 0);
@@ -1053,12 +1203,22 @@ function showHome() {
     const servicesEl = document.getElementById('services');
     const contactEl = document.getElementById('contact');
     const profilePageEl = document.getElementById('userProfilePage');
+    const expertSection = document.getElementById('expertDoctorsSection');
+    const doctorPatientsPage = document.getElementById('doctorPatientsPage');
+    const doctorProfilePage = document.getElementById('doctorProfilePage');
+    const appointmentBookingPage = document.getElementById('appointmentBookingPage');
+    const appointmentViewPage = document.getElementById('appointmentViewPage');
     
     if (homeEl) homeEl.style.display = 'block';
     if (aboutEl) aboutEl.style.display = 'block';
     if (servicesEl) servicesEl.style.display = 'block';
     if (contactEl) contactEl.style.display = 'block';
     if (profilePageEl) profilePageEl.style.display = 'none';
+    if (expertSection) expertSection.style.display = 'none';
+    if (doctorPatientsPage) doctorPatientsPage.style.display = 'none';
+    if (doctorProfilePage) doctorProfilePage.style.display = 'none';
+    if (appointmentBookingPage) appointmentBookingPage.style.display = 'none';
+    if (appointmentViewPage) appointmentViewPage.style.display = 'none';
     window.scrollTo(0, 0);
 }
 
@@ -1123,7 +1283,7 @@ function showBookAppointment(e) {
         });
 }
 
-// View Patients List - Doctor Feature
+// View Patients List - Doctor Feature (full page)
 function showPatientsList(e) {
     if (e) e.preventDefault();
     
@@ -1131,26 +1291,92 @@ function showPatientsList(e) {
         alert('Please login as a doctor to view patients');
         return;
     }
-    
-    // Fetch patients from API
-    fetch(`${API_BASE_URL}/patients`)
-        .then(res => res.json())
-        .then(patients => {
-            if (patients.length === 0) {
-                alert('No patients in the system');
-                return;
-            }
-            
-            const patientList = patients.map((p, index) => {
-                return (index + 1) + '. ' + p.name + ' (Email: ' + p.email + ', Age: ' + p.age + ', Gender: ' + p.gender + ')';
-            }).join('\n');
-            
-            alert('👥 PATIENTS LIST:\n\n' + patientList);
-        })
-        .catch(err => {
-            alert('❌ Failed to load patients. Make sure backend is running.');
-            console.error(err);
-        });
+
+    // Hide main sections and dashboards
+    const elemsToHide = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard'];
+    elemsToHide.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    // Show doctor patients full page
+    const page = document.getElementById('doctorPatientsPage');
+    if (!page) return;
+    page.style.display = 'block';
+
+    const grid = document.getElementById('doctorPatientsGrid');
+    if (!grid) return;
+    grid.innerHTML = '<p class="loading">Loading patients...</p>';
+
+    // Fetch patients and appointments for this doctor
+    Promise.all([
+        fetch(`${API_BASE_URL}/patients`).then(r => r.ok ? r.json() : []),
+        fetch(`${API_BASE_URL}/appointments?doctorId=${encodeURIComponent(currentUser.id)}`).then(r => r.ok ? r.json() : [])
+    ])
+    .then(([patients, doctorAppointments]) => {
+        if (!patients || patients.length === 0) {
+            grid.innerHTML = '<p class="no-patients">No patients found.</p>';
+            return;
+        }
+
+        // Determine patients associated with this doctor via appointments
+        const patientIds = [...new Set(doctorAppointments.map(a => a.patientId))];
+        const doctorPatients = patients.filter(p => patientIds.includes(p.id));
+
+        if (doctorPatients.length === 0) {
+            grid.innerHTML = '<p class="no-patients">No patients associated with you yet.</p>';
+            return;
+        }
+
+        // Map last appointment per patient
+        doctorAppointments.sort((a,b) => new Date(b.date) - new Date(a.date));
+        const lastAptMap = new Map();
+        doctorAppointments.forEach(apt => { if (!lastAptMap.has(apt.patientId)) lastAptMap.set(apt.patientId, apt); });
+
+        const cards = doctorPatients.map(p => {
+            const lastApt = lastAptMap.get(p.id);
+            const lastLine = lastApt ? `<p class="patient-last">Last Visit: ${lastApt.date} at ${lastApt.time}</p>` : '<p class="patient-last">No visits yet</p>';
+            const safeName = (p.name || '').replace(/'/g, "\\'");
+            return `
+                <div class="patient-card" data-name="${(p.name||'').toLowerCase()}" data-email="${(p.email||'').toLowerCase()}" data-phone="${p.phone||''}">
+                    <div class="avatar">${(p.name||'').charAt(0).toUpperCase()}</div>
+                    <div class="patient-info">
+                        <h4>${p.name}</h4>
+                        <p class="patient-meta">Age: ${p.age || 'N/A'} • ${p.gender || 'N/A'}</p>
+                        <p class="patient-contact">📞 ${p.phone || 'N/A'} • ✉️ ${p.email || 'N/A'}</p>
+                        ${lastLine}
+                    </div>
+                    <div class="patient-actions">
+                        <button class="btn btn-primary" onclick="viewPatientDetails(${p.id}, '${safeName}')">View</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        grid.innerHTML = cards;
+    })
+    .catch(err => {
+        console.error('Failed to load patients or appointments:', err);
+        grid.innerHTML = '<p class="error">Failed to load patients. Please try again later.</p>';
+    });
+}
+
+// Filter patients on doctor full page
+function filterDoctorPatients() {
+    const qEl = document.getElementById('doctorPatientSearch');
+    if (!qEl) return;
+    const q = qEl.value.trim().toLowerCase();
+    const cards = document.querySelectorAll('#doctorPatientsGrid .patient-card');
+    cards.forEach(card => {
+        const name = card.dataset.name || '';
+        const email = card.dataset.email || '';
+        const phone = card.dataset.phone || '';
+        if (!q || name.includes(q) || email.includes(q) || phone.includes(q)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
 }
 
 // Logout
@@ -1359,3 +1585,109 @@ function showMyAppointments(e) {
 }
 
 updateNavBar();
+
+// Show Expert Doctors (About -> Expert Doctors)
+function showExpertDoctors(e) {
+    if (e) e.preventDefault();
+
+    // Hide main sections
+    const homeEl = document.getElementById('home');
+    const aboutEl = document.getElementById('about');
+    const servicesEl = document.getElementById('services');
+    const contactEl = document.getElementById('contact');
+
+    if (homeEl) homeEl.style.display = 'none';
+    if (aboutEl) aboutEl.style.display = 'none';
+    if (servicesEl) servicesEl.style.display = 'none';
+    if (contactEl) contactEl.style.display = 'none';
+
+    // Show expert doctors section
+    const expertSection = document.getElementById('expertDoctorsSection');
+    if (expertSection) expertSection.style.display = 'block';
+
+    const grid = document.getElementById('expertDoctorsGrid');
+    if (!grid) return;
+    grid.innerHTML = '<p class="loading">Loading doctors...</p>';
+
+    // Fetch doctors from API and render cards
+    fetch(`${API_BASE_URL}/doctors`)
+        .then(res => {
+            if (!res.ok) return res.json().then(d => Promise.reject(d));
+            return res.json();
+        })
+        .then(doctors => {
+            if (!doctors || doctors.length === 0) {
+                grid.innerHTML = '<p class="no-doctors">No doctors available at the moment.</p>';
+                return;
+            }
+
+            const cards = doctors.map(doc => {
+                const education = doc.education || 'Education information not provided';
+                const experience = doc.experience ? doc.experience + ' years' : 'Experience not specified';
+                const specialization = doc.specialization || 'General';
+                return `
+                    <div class="doctor-card">
+                        <div class="doctor-avatar">${(doc.name||'').charAt(0).toUpperCase()}</div>
+                        <div class="doctor-info">
+                            <h4>Dr. ${doc.name}</h4>
+                            <p class="doctor-special">${specialization}</p>
+                            <p class="doctor-edu">${education}</p>
+                            <p class="doctor-exp">${experience}</p>
+                            <p class="doctor-contact">📞 ${doc.phone || 'N/A'} • ✉️ ${doc.email || 'N/A'}</p>
+                        </div>
+                        <div class="doctor-actions">
+                            <button class="btn btn-primary" onclick="openDoctorProfile(${doc.id})">View Profile</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            grid.innerHTML = cards;
+        })
+        .catch(err => {
+            console.error('Failed to load doctors:', err);
+            grid.innerHTML = '<p class="error">Failed to load doctors. Please try again later.</p>';
+        });
+}
+
+function openDoctorProfile(doctorId) {
+    if (!doctorId) return;
+
+    // Hide main sections and other pages
+    const elemsToHide = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard','doctorPatientsPage'];
+    elemsToHide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+
+    const profilePage = document.getElementById('doctorProfilePage');
+    if (!profilePage) return;
+    profilePage.style.display = 'block';
+
+    // Fetch doctor data and populate profile page
+    fetch(`${API_BASE_URL}/doctors`)
+        .then(res => {
+            if (!res.ok) return res.json().then(d => Promise.reject(d));
+            return res.json();
+        })
+        .then(doctors => {
+            const doc = doctors.find(d => d.id === doctorId);
+            if (!doc) { document.getElementById('doctorProfileName').textContent = 'Doctor not found'; return; }
+
+            document.getElementById('doctorProfileName').textContent = 'Dr. ' + (doc.name || '');
+            const avatar = document.getElementById('doctorProfileAvatar');
+            if (avatar) avatar.textContent = (doc.name||'').charAt(0).toUpperCase();
+            const spec = document.getElementById('doctorProfileSpecialization');
+            if (spec) spec.textContent = doc.specialization || 'General';
+            const edu = document.getElementById('doctorProfileEducation');
+            if (edu) edu.textContent = 'Education: ' + (doc.education || 'Not provided');
+            const exp = document.getElementById('doctorProfileExperience');
+            if (exp) exp.textContent = 'Experience: ' + (doc.experience ? doc.experience + ' years' : 'Not specified');
+            const contact = document.getElementById('doctorProfileContact');
+            if (contact) contact.textContent = 'Phone: ' + (doc.phone || 'N/A');
+            const email = document.getElementById('doctorProfileEmail');
+            if (email) email.textContent = 'Email: ' + (doc.email || 'N/A');
+        })
+        .catch(err => {
+            console.error('Failed to load doctor profile:', err);
+            const grid = document.getElementById('doctorProfileName');
+            if (grid) grid.textContent = 'Failed to load profile';
+        });
+}

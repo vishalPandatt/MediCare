@@ -14,7 +14,38 @@
             <ul class="nav-links">
                 <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#services" class="nav-link">Services</a></li>
+                
+                <!-- Patient Dropdown -->
+                <li class="nav-item-dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event, 'patientDropdown')">👤 Patient</a>
+                    <div class="dropdown-menu" id="patientDropdown">
+                        <a href="#" onclick="showPatientLogin(event)">Patient Login</a>
+                        <a href="#" onclick="showPatientSignup(event)">Patient Sign Up</a>
+                        <a href="#" onclick="showPatientDashboard(event)">Patient Dashboard</a>
+                    </div>
+                </li>
+
+                <!-- Doctor Dropdown -->
+                <li class="nav-item-dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event, 'doctorDropdown')">👨‍⚕️ Doctor</a>
+                    <div class="dropdown-menu" id="doctorDropdown">
+                        <a href="#" onclick="showDoctorLogin(event)">Doctor Login</a>
+                        <a href="#" onclick="showDoctorSignup(event)">Doctor Sign Up</a>
+                        <a href="#" onclick="showDoctorProfile(event)">Doctor Profile</a>
+                    </div>
+                </li>
+
+                <!-- Services Dropdown -->
+                <li class="nav-item-dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event, 'servicesDropdown')">🏥 Services</a>
+                    <div class="dropdown-menu" id="servicesDropdown">
+                        <a href="#" onclick="showAppointmentService(event)">Appointment</a>
+                        <a href="#" onclick="showEmergencyService(event)">Emergency</a>
+                        <a href="#" onclick="showAmbulanceService(event)">Ambulance</a>
+                        <a href="#" onclick="showMedicalService(event)">Medical Service</a>
+                    </div>
+                </li>
+
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li id="loginNavItem" style="display: block;">
                     <a href="#" class="nav-link login-btn" onclick="showLoginModal(event)">Login</a>
@@ -56,6 +87,19 @@
                     <button class="btn btn-secondary" onclick="showMyAppointments(event)">📋 My Appointments</button>
                     <button class="btn btn-primary" onclick="showPatientsList(event)">👥 View Patients List</button>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expert Doctors Section -->
+    <section id="expertDoctorsSection" class="expert-doctors-section" style="display: none;">
+        <div class="container">
+            <div class="experts-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>Expert Doctors</h1>
+            </div>
+            <div id="expertDoctorsGrid" class="expert-doctors-grid">
+                <p class="loading">Loading doctors...</p>
             </div>
         </div>
     </section>
@@ -201,6 +245,124 @@
         </div>
     </section>
 
+    <!-- Doctor Patients Full Page -->
+    <section id="doctorPatientsPage" class="doctor-patients-page" style="display: none;">
+        <div class="container">
+            <div class="patients-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>Patients</h1>
+            </div>
+            <div class="patients-top">
+                <input id="doctorPatientSearch" type="text" placeholder="Search patients by name, phone, or email" oninput="filterDoctorPatients()">
+            </div>
+            <div id="doctorPatientsGrid" class="patients-list-grid">
+                <p class="loading">Loading patients...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Doctor Profile Page -->
+    <section id="doctorProfilePage" class="doctor-profile-page" style="display: none;">
+        <div class="container">
+            <div class="profile-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1 id="doctorProfileName">Doctor Name</h1>
+            </div>
+            <div class="doctor-profile-card">
+                <div class="doctor-avatar-large" id="doctorProfileAvatar">D</div>
+                <div class="doctor-profile-info">
+                    <p class="doctor-special" id="doctorProfileSpecialization"></p>
+                    <p id="doctorProfileEducation"></p>
+                    <p id="doctorProfileExperience"></p>
+                    <p id="doctorProfileContact"></p>
+                    <p id="doctorProfileEmail"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Pages: Appointment -->
+    <section id="appointmentServicePage" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>📅 Appointment Booking</h1>
+            </div>
+            <div class="service-content">
+                <p>Schedule your appointment with our expert doctors.</p>
+                <button class="btn btn-primary" onclick="showBookAppointment(event)">Book Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Pages: Emergency -->
+    <section id="emergencyServicePage" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>🚑 Emergency Service</h1>
+            </div>
+            <div class="service-content">
+                <p>24/7 Emergency medical assistance available.</p>
+                <div class="emergency-info">
+                    <h3>Emergency Hotline:</h3>
+                    <p class="highlight">📞 +1-800-MEDICARE (1-800-633-4828)</p>
+                    <p>Available 24/7 for urgent medical needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Pages: Ambulance -->
+    <section id="ambulanceServicePage" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>🚑 Ambulance Service</h1>
+            </div>
+            <div class="service-content">
+                <p>Quick ambulance services for medical emergencies.</p>
+                <div class="ambulance-info">
+                    <h3>Ambulance Availability:</h3>
+                    <p>✅ 24/7 availability</p>
+                    <p>✅ Professional trained paramedics</p>
+                    <p>✅ Advanced life support equipment</p>
+                    <button class="btn btn-primary" style="margin-top: 1rem;">Request Ambulance</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Pages: Medical Service -->
+    <section id="medicalServicePage" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>🏥 Medical Services</h1>
+            </div>
+            <div class="service-content">
+                <div class="medical-services-grid">
+                    <div class="medical-service-card">
+                        <h3>General Consultation</h3>
+                        <p>Consult with general practitioners for routine check-ups and advice.</p>
+                    </div>
+                    <div class="medical-service-card">
+                        <h3>Specialist Consultation</h3>
+                        <p>Specialized medical services from expert doctors in various fields.</p>
+                    </div>
+                    <div class="medical-service-card">
+                        <h3>Lab Testing</h3>
+                        <p>Advanced laboratory testing services with quick results.</p>
+                    </div>
+                    <div class="medical-service-card">
+                        <h3>Home Care</h3>
+                        <p>Medical care services provided at your home.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
@@ -208,8 +370,8 @@
             <div class="about-grid">
                 <div class="about-card">
                     <div class="icon">👨‍⚕️</div>
-                    <h3>Expert Doctors</h3>
-                    <p>Connect with experienced healthcare professionals</p>
+                    <h3 onclick="showExpertDoctors(event)" style="cursor:pointer;">Expert Doctors</h3>
+                    <p onclick="showExpertDoctors(event)" style="cursor:pointer;">Connect with experienced healthcare professionals</p>
                 </div>
                 <div class="about-card">
                     <div class="icon">🏥</div>
