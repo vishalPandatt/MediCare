@@ -55,26 +55,26 @@ function clearUserSession() {
 // ==========================================
 
 function toggleDropdown(e, dropdownId) {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    if (e && e.stopPropagation) e.stopPropagation();
+    console.log('toggleDropdown:', dropdownId);
     const dropdown = document.getElementById(dropdownId);
     if (!dropdown) return;
+
+    // Toggle the requested dropdown
     dropdown.classList.toggle('show');
-    
+
     // Close other dropdowns
-    const allDropdowns = document.querySelectorAll('.dropdown-menu.show');
-    allDropdowns.forEach(d => {
+    document.querySelectorAll('.dropdown-menu.show').forEach(d => {
         if (d.id !== dropdownId) d.classList.remove('show');
     });
 }
 
 // Close dropdowns when clicking outside
 document.addEventListener('click', function(event) {
-    const dropdowns = document.querySelectorAll('.dropdown-menu.show');
-    dropdowns.forEach(dropdown => {
-        if (!dropdown.closest('.nav-item-dropdown')) {
-            dropdown.classList.remove('show');
-        }
-    });
+    if (!event.target.closest('.nav-item-dropdown')) {
+        document.querySelectorAll('.dropdown-menu.show').forEach(d => d.classList.remove('show'));
+    }
 });
 
 // ==========================================
