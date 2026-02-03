@@ -20,7 +20,6 @@
                     <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event, 'patientDropdown')">👤 Patient</a>
                     <div class="dropdown-menu" id="patientDropdown">
                         <a href="#" onclick="showPatientLogin(event)">Patient Login</a>
-                        <a href="#" onclick="showPatientSignup(event)">Patient Sign Up</a>
                         <a href="#" onclick="showPatientDashboard(event)">Patient Dashboard</a>
                     </div>
                 </li>
@@ -30,7 +29,6 @@
                     <a href="#" class="nav-link dropdown-toggle" onclick="toggleDropdown(event, 'doctorDropdown')">👨‍⚕️ Doctor</a>
                     <div class="dropdown-menu" id="doctorDropdown">
                         <a href="#" onclick="showDoctorLogin(event)">Doctor Login</a>
-                        <a href="#" onclick="showDoctorSignup(event)">Doctor Sign Up</a>
                         <a href="#" onclick="showDoctorProfile(event)">Doctor Profile</a>
                     </div>
                 </li>
@@ -363,6 +361,200 @@
         </div>
     </section>
 
+    <!-- Online Consultant Service Page -->
+    <section id="onlineConsultantPage" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>💻 Online Consultations</h1>
+            </div>
+            <div class="service-content">
+                <p>Connect with our experienced doctors through secure video consultations from the comfort of your home.</p>
+                <div class="consultant-info">
+                    <h3>Why Choose Online Consultations?</h3>
+                    <div class="consultant-benefits">
+                        <div class="benefit-item">
+                            <h4>✅ Convenient</h4>
+                            <p>Consult from home, office, or anywhere</p>
+                        </div>
+                        <div class="benefit-item">
+                            <h4>✅ Time-Saving</h4>
+                            <p>No travel time, flexible scheduling</p>
+                        </div>
+                        <div class="benefit-item">
+                            <h4>✅ Affordable</h4>
+                            <p>Competitive pricing for quality healthcare</p>
+                        </div>
+                        <div class="benefit-item">
+                            <h4>✅ Secure</h4>
+                            <p>HIPAA-compliant encrypted video calls</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 2rem;">Available Specialties:</h3>
+                    <div class="specialty-grid">
+                        <div class="specialty-item">🩺 General Medicine</div>
+                        <div class="specialty-item">👁️ Ophthalmology</div>
+                        <div class="specialty-item">🦷 Dentistry</div>
+                        <div class="specialty-item">🧠 Neurology</div>
+                        <div class="specialty-item">❤️ Cardiology</div>
+                        <div class="specialty-item">🦴 Orthopedics</div>
+                    </div>
+                    <button type="button" class="btn btn-primary" style="margin-top: 2rem;">Schedule Consultation</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Appointment Service Page -->
+    <section id="appointmentPageFull" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>📅 Appointment Booking</h1>
+            </div>
+            <div class="service-content">
+                <p>Easily schedule appointments with our expert doctors and manage your healthcare needs.</p>
+                <div class="appointment-info">
+                    <h3>How to Book an Appointment?</h3>
+                    <div class="steps-container">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <h4>Search Doctors</h4>
+                            <p>Find doctors by specialty or availability</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <h4>Select Date & Time</h4>
+                            <p>Choose convenient appointment slots</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <h4>Confirm Details</h4>
+                            <p>Review and confirm your appointment</p>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">4</span>
+                            <h4>Get Confirmation</h4>
+                            <p>Receive appointment confirmation via email</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 2rem;">Types of Appointments:</h3>
+                    <div class="appointment-types">
+                        <div class="apt-type">
+                            <h4>In-Clinic</h4>
+                            <p>Visit our clinic for face-to-face consultation</p>
+                        </div>
+                        <div class="apt-type">
+                            <h4>Online</h4>
+                            <p>Video consultation from your home</p>
+                        </div>
+                        <div class="apt-type">
+                            <h4>Home Visit</h4>
+                            <p>Doctor visits you at your location</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" style="margin-top: 2rem;">Book Appointment</button>
+    <section id="medicalRecordPageFull" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>📋 Medical Records</h1>
+            </div>
+            <div class="service-content">
+                <p>Access and manage your complete medical history securely in one place.</p>
+                <div class="medical-record-info">
+                    <h3>Your Medical Records Include:</h3>
+                    <div class="record-items">
+                        <div class="record-item">
+                            <h4>📋 Consultation History</h4>
+                            <p>Complete history of all doctor consultations</p>
+                        </div>
+                        <div class="record-item">
+                            <h4>🧪 Lab Reports</h4>
+                            <p>Digital lab test results and analysis</p>
+                        </div>
+                        <div class="record-item">
+                            <h4>📷 Medical Images</h4>
+                            <p>X-rays, MRI scans, and other imaging results</p>
+                        </div>
+                        <div class="record-item">
+                            <h4>💊 Prescriptions</h4>
+                            <p>Current and past medications prescribed</p>
+                        </div>
+                        <div class="record-item">
+                            <h4>⚠️ Allergies & Conditions</h4>
+                            <p>Track allergies and chronic conditions</p>
+                        </div>
+                        <div class="record-item">
+                            <h4>📊 Health Summary</h4>
+                            <p>Overview of your health status and trends</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 2rem;">Benefits:</h3>
+                    <ul style="line-height: 1.8; margin-top: 1rem;">
+                        <li>✅ All records in one secure location</li>
+                        <li>✅ Easy access anytime, anywhere</li>
+                        <li>✅ Share with doctors for better care</li>
+                        <li>✅ Download records as PDF</li>
+                        <li>✅ HIPAA-compliant encryption</li>
+                    </ul>
+                    <button class="btn btn-primary" style="margin-top: 2rem;">View My Records</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prescription Management Service Page -->
+    <section id="prescriptionPageFull" class="service-page" style="display: none;">
+        <div class="container">
+            <div class="service-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>💊 Prescription Management</h1>
+            </div>
+            <div class="service-content">
+                <p>Manage your digital prescriptions and keep track of your medications easily.</p>
+                <div class="prescription-info">
+                    <h3>Features:</h3>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <h4>📱 Digital Prescriptions</h4>
+                            <p>View all your prescriptions digitally in one place</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⏰ Medication Reminders</h4>
+                            <p>Get timely reminders to take your medications</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💳 Easy Refills</h4>
+                            <p>Request refills directly from the app</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏥 Pharmacy Integration</h4>
+                            <p>Send prescriptions directly to pharmacies</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💰 Cost Tracking</h4>
+                            <p>Monitor medication costs and insurance coverage</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔔 Drug Interactions</h4>
+                            <p>Get alerts about potential drug interactions</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-top: 2rem;">How to Use:</h3>
+                    <ol style="line-height: 1.8; margin-top: 1rem;">
+                        <li>Receive prescription from your doctor</li>
+                        <li>Digital prescription appears in your account</li>
+                        <li>Set medication reminders</li>
+                        <li>Request refills when needed</li>
+                        <li>Track medication adherence</li>
+                    </ol>
+                    <button class="btn btn-primary" style="margin-top: 2rem;">Manage Prescriptions</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
@@ -395,18 +587,22 @@
                 <div class="service-card">
                     <h3>Online Consultations</h3>
                     <p>Schedule video consultations with specialists</p>
+                    <button type="button" class="btn btn-secondary" onclick="showOnlineConsultantPage(event)">View More →</button>
                 </div>
                 <div class="service-card">
                     <h3>Appointment Booking</h3>
                     <p>Easy appointment scheduling and management</p>
+                    <button type="button" class="btn btn-secondary" onclick="showAppointmentPage(event)">View More →</button>
                 </div>
                 <div class="service-card">
                     <h3>Medical Records</h3>
                     <p>Access and manage your health records securely</p>
+                    <button type="button" class="btn btn-secondary" onclick="showMedicalRecordPage(event)">View More →</button>
                 </div>
                 <div class="service-card">
                     <h3>Prescription Management</h3>
                     <p>View and manage digital prescriptions</p>
+                    <button type="button" class="btn btn-secondary" onclick="showPrescriptionPage(event)">View More →</button>
                 </div>
             </div>
         </div>

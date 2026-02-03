@@ -1833,3 +1833,173 @@ body {
     color: var(--danger-color);
 }
 
+/* New Service Pages Styling */
+.consultant-info,
+.appointment-info,
+.medical-record-info,
+.prescription-info {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-top: 2rem;
+}
+
+.consultant-benefits,
+.specialty-grid,
+.appointment-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.benefit-item,
+.specialty-item,
+.apt-type,
+.record-item,
+.feature-card {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.08) 0%, rgba(52, 152, 219, 0.04) 100%);
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.benefit-item:hover,
+.record-item:hover,
+.feature-card:hover {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.15) 0%, rgba(52, 152, 219, 0.08) 100%);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.2);
+}
+
+.benefit-item h4,
+.record-item h4,
+.feature-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.benefit-item p,
+.record-item p,
+.feature-card p {
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.specialty-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.specialty-item {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    text-align: center;
+    padding: 1.2rem;
+    border-radius: 10px;
+    border-left: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.specialty-item:hover {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    transform: scale(1.05);
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.step {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 152, 219, 0.05) 100%);
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.step:hover {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.2) 0%, rgba(52, 152, 219, 0.1) 100%);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(52, 152, 219, 0.2);
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.step h4 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.step p {
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.appointment-types {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.apt-type {
+    text-align: center;
+    border-left: none;
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.08) 0%, rgba(108, 117, 125, 0.04) 100%);
+    border-top: 4px solid var(--primary-color);
+}
+
+.apt-type h4 {
+    color: var(--primary-color);
+}
+
+.record-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.record-item {
+    border-left: 4px solid var(--primary-color);
+    padding: 1.2rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.feature-card {
+    border-left: 4px solid var(--primary-color);
+    padding: 1.2rem;
+    text-align: center;
+}
+
+.feature-card h4 {
+    font-size: 1rem;
+}
+
+.service-card .btn {
+    width: 100%;
+    margin-top: 1rem;
+}

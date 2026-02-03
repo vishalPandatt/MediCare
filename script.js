@@ -179,8 +179,64 @@ function showMedicalService(e) {
     document.getElementById('medicalServicePage').style.display = 'block';
 }
 
+function showOnlineConsultantPage(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    console.log('Opening Online Consultant Page');
+    hideAllPages();
+    const page = document.getElementById('onlineConsultantPage');
+    if (page) {
+        page.style.display = 'block';
+        console.log('✅ Online Consultant Page shown');
+    }
+}
+
+function showAppointmentPage(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    console.log('Opening Appointment Page');
+    hideAllPages();
+    const page = document.getElementById('appointmentPageFull');
+    if (page) {
+        page.style.display = 'block';
+        console.log('✅ Appointment Page shown');
+    }
+}
+
+function showMedicalRecordPage(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    console.log('Opening Medical Record Page');
+    hideAllPages();
+    const page = document.getElementById('medicalRecordPageFull');
+    if (page) {
+        page.style.display = 'block';
+        console.log('✅ Medical Record Page shown');
+    }
+}
+
+function showPrescriptionPage(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    console.log('Opening Prescription Page');
+    hideAllPages();
+    const page = document.getElementById('prescriptionPageFull');
+    if (page) {
+        page.style.display = 'block';
+        console.log('✅ Prescription Page shown');
+    }
+}
+
 function hideAllPages() {
-    const pageIds = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard','doctorPatientsPage','doctorProfilePage','appointmentServicePage','emergencyServicePage','ambulanceServicePage','medicalServicePage','fullScreenLoginPage','registerModal'];
+    const pageIds = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard','doctorPatientsPage','doctorProfilePage','appointmentServicePage','emergencyServicePage','ambulanceServicePage','medicalServicePage','onlineConsultantPage','appointmentPageFull','medicalRecordPageFull','prescriptionPageFull','fullScreenLoginPage','registerModal'];
     pageIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
