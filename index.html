@@ -621,6 +621,146 @@
         </div>
     </section>
 
+    <!-- Admin Dashboard Page -->
+    <section id="adminDashboard" class="admin-dashboard" style="display: none;">
+        <div class="container">
+            <div class="admin-header">
+                <button class="back-btn" onclick="backToHome()">← Back to Home</button>
+                <h1>🔐 Admin Dashboard</h1>
+            </div>
+
+            <!-- Admin Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" onclick="switchAdminTab(event, 'patients-tab')">👥 Patients</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab(event, 'doctors-tab')">👨‍⚕️ Doctors</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab(event, 'appointments-tab')">📅 Appointments</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab(event, 'analytics-tab')">📊 Analytics</button>
+            </div>
+
+            <!-- Patients Tab -->
+            <div id="patients-tab" class="admin-tab-content active">
+                <h2>Patients List</h2>
+                <div class="admin-controls">
+                    <input type="text" id="patientSearch" placeholder="Search patients by name or email..." oninput="filterAdminPatients()">
+                    <button type="button" class="btn btn-primary" onclick="exportPatientsData()">📥 Export Data</button>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Blood Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientsTableBody">
+                            <tr><td colspan="8" class="text-center">Loading patients...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Doctors Tab -->
+            <div id="doctors-tab" class="admin-tab-content" style="display: none;">
+                <h2>Doctors List</h2>
+                <div class="admin-controls">
+                    <input type="text" id="doctorSearch" placeholder="Search doctors by name or specialization..." oninput="filterAdminDoctors()">
+                    <button type="button" class="btn btn-primary" onclick="exportDoctorsData()">📥 Export Data</button>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Specialization</th>
+                                <th>License Number</th>
+                                <th>Experience</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctorsTableBody">
+                            <tr><td colspan="8" class="text-center">Loading doctors...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Appointments Tab -->
+            <div id="appointments-tab" class="admin-tab-content" style="display: none;">
+                <h2>Appointments Overview</h2>
+                <div class="admin-controls">
+                    <select id="appointmentFilter" onchange="filterAdminAppointments()">
+                        <option value="">All Status</option>
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" onclick="exportAppointmentsData()">📥 Export Data</button>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Patient Name</th>
+                                <th>Doctor Name</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointmentsTableBody">
+                            <tr><td colspan="8" class="text-center">Loading appointments...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics-tab" class="admin-tab-content" style="display: none;">
+                <h2>System Analytics</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Total Patients</h3>
+                        <p class="analytics-number" id="totalPatients">0</p>
+                        <span class="analytics-label">Registered Users</span>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Total Doctors</h3>
+                        <p class="analytics-number" id="totalDoctors">0</p>
+                        <span class="analytics-label">Active Doctors</span>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Total Appointments</h3>
+                        <p class="analytics-number" id="totalAppointments">0</p>
+                        <span class="analytics-label">All Appointments</span>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Appointments Today</h3>
+                        <p class="analytics-number" id="appointmentsToday">0</p>
+                        <span class="analytics-label">Scheduled for Today</span>
+                    </div>
+                </div>
+                <div class="analytics-section">
+                    <h3>Specialization Distribution</h3>
+                    <div id="specializationChart" class="specialization-list">
+                        <p class="text-center">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">

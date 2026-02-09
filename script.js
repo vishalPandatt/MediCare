@@ -1747,3 +1747,259 @@ function openDoctorProfile(doctorId) {
             if (grid) grid.textContent = 'Failed to load profile';
         });
 }
+// ==========================================
+// Admin Dashboard Functions
+// ==========================================
+
+function showAdminDashboard(e) {
+    if (e) e.preventDefault();
+    // Check if user is admin
+    if (currentUserType !== 'admin') {
+        alert('❌ Admin access only. Please login as admin.');
+        return;
+    }
+    hideAllPages();
+    document.getElementById('adminDashboard').style.display = 'block';
+    loadAdminDashboard();
+}
+
+function loadAdminDashboard() {
+    loadAdminPatients();
+    loadAdminDoctors();
+    loadAdminAppointments();
+    loadAdminAnalytics();
+}
+
+// Load patients for admin view
+function loadAdminPatients() {
+    fetch(`${API_BASE_URL}/patients`)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('patientsTableBody');
+            if (data.patients && data.patients.length > 0) {
+                tbody.innerHTML = data.patients.map((patient, index) => `
+                    <tr>
+                        <td>${patient.id || index + 1}</td>
+                        <td>${patient.name}</td>
+                        <td>${patient.email}</td>
+                        <td>${patient.phone || 'N/A'}</td>
+                        <td>${patient.age || 'N/A'}</td>
+                        <td>${patient.gender || 'N/A'}</td>
+                        <td>${patient.bloodType || 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="viewAdminUserDetails(${patient.id}, 'patient')">View</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteAdminUser(${patient.id}, 'patient')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No patients found</td></tr>';
+            }
+        })
+        .catch(err => {
+            console.error('Failed to load patients:', err);
+            document.getElementById('patientsTableBody').innerHTML = '<tr><td colspan="8" class="text-center">Error loading data</td></tr>';
+        });
+}
+
+// Load doctors for admin view
+function loadAdminDoctors() {
+    fetch(`${API_BASE_URL}/doctors`)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('doctorsTableBody');
+            if (data.doctors && data.doctors.length > 0) {
+                tbody.innerHTML = data.doctors.map((doctor, index) => `
+                    <tr>
+                        <td>${doctor.id || index + 1}</td>
+                        <td>${doctor.name}</td>
+                        <td>${doctor.email}</td>
+                        <td>${doctor.phone || 'N/A'}</td>
+                        <td>${doctor.specialization || 'N/A'}</td>
+                        <td>${doctor.licenseNumber || 'N/A'}</td>
+                        <td>${doctor.experience || 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="viewAdminUserDetails(${doctor.id}, 'doctor')">View</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteAdminUser(${doctor.id}, 'doctor')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No doctors found</td></tr>';
+            }
+        })
+        .catch(err => {
+            console.error('Failed to load doctors:', err);
+            document.getElementById('doctorsTableBody').innerHTML = '<tr><td colspan="8" class="text-center">Error loading data</td></tr>';
+        });
+}
+
+// Load appointments for admin view
+function loadAdminAppointments() {
+    fetch(`${API_BASE_URL}/appointments`)
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('appointmentsTableBody');
+            if (data.appointments && data.appointments.length > 0) {
+                tbody.innerHTML = data.appointments.map((apt, index) => `
+                    <tr>
+                        <td>${apt.id || index + 1}</td>
+                        <td>${apt.patientName || 'N/A'}</td>
+                        <td>${apt.doctorName || 'N/A'}</td>
+                        <td>${apt.date || 'N/A'}</td>
+                        <td>${apt.time || 'N/A'}</td>
+                        <td><span class="status-badge status-${apt.status.toLowerCase()}">${apt.status}</span></td>
+                        <td>${apt.type || 'General'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="viewAppointmentDetails(${apt.id})">View</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No appointments found</td></tr>';
+            }
+        })
+        .catch(err => {
+            console.error('Failed to load appointments:', err);
+            document.getElementById('appointmentsTableBody').innerHTML = '<tr><td colspan="8" class="text-center">Error loading data</td></tr>';
+        });
+}
+
+// Load analytics data
+function loadAdminAnalytics() {
+    Promise.all([
+        fetch(`${API_BASE_URL}/patients`).then(r => r.json()),
+        fetch(`${API_BASE_URL}/doctors`).then(r => r.json()),
+        fetch(`${API_BASE_URL}/appointments`).then(r => r.json())
+    ])
+    .then(([patientData, doctorData, appointmentData]) => {
+        // Update counters
+        document.getElementById('totalPatients').textContent = patientData.patients?.length || 0;
+        document.getElementById('totalDoctors').textContent = doctorData.doctors?.length || 0;
+        document.getElementById('totalAppointments').textContent = appointmentData.appointments?.length || 0;
+        
+        // Count today's appointments
+        const today = new Date().toISOString().split('T')[0];
+        const todayAppointments = appointmentData.appointments?.filter(a => a.date === today).length || 0;
+        document.getElementById('appointmentsToday').textContent = todayAppointments;
+        
+        // Build specialization chart
+        const specializations = {};
+        doctorData.doctors?.forEach(doc => {
+            const spec = doc.specialization || 'General';
+            specializations[spec] = (specializations[spec] || 0) + 1;
+        });
+        
+        const chartHTML = Object.entries(specializations)
+            .map(([spec, count]) => `
+                <div class="specialization-item">
+                    <span>${spec}:</span>
+                    <span class="count">${count} doctors</span>
+                </div>
+            `).join('');
+        
+        document.getElementById('specializationChart').innerHTML = chartHTML || '<p>No specializations</p>';
+    })
+    .catch(err => console.error('Failed to load analytics:', err));
+}
+
+// Admin tab switching
+function switchAdminTab(e, tabId) {
+    if (e) e.preventDefault();
+    
+    // Hide all tabs
+    document.querySelectorAll('.admin-tab-content').forEach(tab => {
+        tab.style.display = 'none';
+    });
+    
+    // Remove active from all buttons
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Show selected tab
+    const tab = document.getElementById(tabId);
+    if (tab) {
+        tab.style.display = 'block';
+    }
+    
+    // Mark button as active
+    e.target.classList.add('active');
+}
+
+// Filter admin patients
+function filterAdminPatients() {
+    const searchTerm = document.getElementById('patientSearch').value.toLowerCase();
+    const rows = document.querySelectorAll('#patientsTableBody tr');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+}
+
+// Filter admin doctors
+function filterAdminDoctors() {
+    const searchTerm = document.getElementById('doctorSearch').value.toLowerCase();
+    const rows = document.querySelectorAll('#doctorsTableBody tr');
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+}
+
+// Filter admin appointments
+function filterAdminAppointments() {
+    const filterValue = document.getElementById('appointmentFilter').value;
+    const rows = document.querySelectorAll('#appointmentsTableBody tr');
+    
+    rows.forEach(row => {
+        if (!filterValue) {
+            row.style.display = '';
+        } else {
+            const statusCell = row.querySelector('td:nth-child(6)');
+            row.style.display = statusCell.textContent.includes(filterValue) ? '' : 'none';
+        }
+    });
+}
+
+// View user details
+function viewAdminUserDetails(userId, userType) {
+    alert(`Viewing ${userType} details for ID: ${userId}`);
+}
+
+// Delete user
+function deleteAdminUser(userId, userType) {
+    if (!confirm(`Are you sure you want to delete this ${userType}?`)) return;
+    
+    const endpoint = userType === 'patient' ? 'patients' : 'doctors';
+    fetch(`${API_BASE_URL}/${endpoint}/${userId}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+            alert(`✅ ${userType} deleted successfully`);
+            loadAdminDashboard();
+        })
+        .catch(err => {
+            console.error('Error deleting user:', err);
+            alert('❌ Failed to delete user');
+        });
+}
+
+// View appointment details
+function viewAppointmentDetails(appointmentId) {
+    alert(`Viewing appointment details for ID: ${appointmentId}`);
+}
+
+// Export functions
+function exportPatientsData() {
+    alert('📥 Exporting patients data... (CSV download will start)');
+}
+
+function exportDoctorsData() {
+    alert('📥 Exporting doctors data... (CSV download will start)');
+}
+
+function exportAppointmentsData() {
+    alert('📥 Exporting appointments data... (CSV download will start)');
+}
