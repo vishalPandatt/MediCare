@@ -236,7 +236,7 @@ function showPrescriptionPage(e) {
 }
 
 function hideAllPages() {
-    const pageIds = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard','doctorPatientsPage','doctorProfilePage','appointmentServicePage','emergencyServicePage','ambulanceServicePage','medicalServicePage','onlineConsultantPage','appointmentPageFull','medicalRecordPageFull','prescriptionPageFull','fullScreenLoginPage','registerModal'];
+    const pageIds = ['home','about','services','contact','expertDoctorsSection','appointmentBookingPage','appointmentViewPage','userProfilePage','patientDashboard','doctorDashboard','doctorPatientsPage','doctorProfilePage','appointmentServicePage','emergencyServicePage','ambulanceServicePage','medicalServicePage','onlineConsultantPage','appointmentPageFull','medicalRecordPageFull','prescriptionPageFull','fullScreenLoginPage','registerModal','adminDashboard'];
     pageIds.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
