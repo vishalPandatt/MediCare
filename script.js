@@ -1104,6 +1104,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function updateNavBar() {
     const loginItem = document.getElementById('loginNavItem');
     const userItem = document.getElementById('userNavItem');
+    const adminItem = document.getElementById('adminNavItem');
     const guestButtons = document.getElementById('guestButtons');
     const patientButtons = document.getElementById('patientButtons');
     const doctorButtons = document.getElementById('doctorButtons');
@@ -1118,6 +1119,11 @@ function updateNavBar() {
         loginItem.style.display = 'none';
         userItem.style.display = 'block';
         
+        // Show admin panel if user is admin
+        if (adminItem) {
+            adminItem.style.display = currentUserType === 'admin' ? 'block' : 'none';
+        }
+        
         // Update hero buttons based on user type
         if (currentUserType === 'patient') {
             guestButtons.style.display = 'none';
@@ -1127,10 +1133,15 @@ function updateNavBar() {
             guestButtons.style.display = 'none';
             patientButtons.style.display = 'none';
             doctorButtons.style.display = 'flex';
+        } else if (currentUserType === 'admin') {
+            guestButtons.style.display = 'none';
+            patientButtons.style.display = 'none';
+            doctorButtons.style.display = 'none';
         }
     } else {
         loginItem.style.display = 'block';
         userItem.style.display = 'none';
+        if (adminItem) adminItem.style.display = 'none';
         guestButtons.style.display = 'flex';
         patientButtons.style.display = 'none';
         doctorButtons.style.display = 'none';

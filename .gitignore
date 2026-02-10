@@ -3,4 +3,5 @@ medicare.db
 package-lock.json
 .DS_Store
 *.log
-.env
+.envcd c:\Users\Dell\Desktop\My html\MediCare
+npx http-server -p 8000
